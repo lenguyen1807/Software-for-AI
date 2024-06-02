@@ -1,9 +1,8 @@
-import { GetBookByID } from "@/lib/api";
+import { GetBookByID, GetLibraryByID } from "@/lib/api";
 import Image from "next/image";
 import { STIX_Two_Text, Nunito } from "next/font/google";
-import { cn } from "@/lib/utils";
-// import { DisplayList } from "@/components/user/booktable";
-// import BorrowForm from "@/components/user/borrow-form";
+import { cn, ToDateString } from "@/lib/utils";
+import BorrowForm from "@/components/user/borrow-form";
 import { Ratings } from "@/components/ui/ratings";
 
 const stix = STIX_Two_Text({
@@ -21,7 +20,7 @@ type Props = {
 
 function TextField({label, value} : {label: string, value: string}) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <h2 className="text-slate-700 text-lg">
         {label}
       </h2>
@@ -44,24 +43,23 @@ export default async function Page(
   { params }: Props
 ) {
   const book = await GetBookByID(params.bookID);
+  const lib = await GetLibraryByID(book.libraryID);
 
   return (
-    <div className="max-w-7xl mx-auto p-10 space-y-20">
-      <div className='flex flex-col justify-center lg:flex-row lg:items-center'>
-      <div className='flex flex-col justify-center sm:w-2/4 xl:ml-40'>
-          <div 
-              className="overflow-hidden flex rounded-r-xl shadow-[-10px_10px_5px_-5px_rgba(0,0,0,0.3)] hover:scale-105"
-              style={{width: "300px", height: "450px"}}
-              key={book._id}
-          >
-              <Image 
-                  src={book.imageUrl}
-                  alt={book.title}
-                  height={200}
-                  width={300}
-                  className="object-cover transition-all"
-              />
-          </div>
+    <div className="w-screen mx-auto p-10 space-y-20">
+      <div className='md:grid md:grid-flow-col md:grid-cols-2 items-center md:justify-items-center justify-center'>
+        <div 
+            className="overflow-hidden flex rounded-r-xl shadow-[-10px_10px_5px_-5px_rgba(0,0,0,0.3)] hover:scale-105"
+            style={{width: "300px", height: "450px"}}
+            key={book._id}
+        >
+            <Image 
+                src={book.imageUrl}
+                alt={book.title}
+                height={200}
+                width={300}
+                className="object-cover transition-all"
+            />
         </div>
         <div className="space-y-5">
           <h1 className={cn("text-5xl text-wrap", stix.className)}>
@@ -77,7 +75,7 @@ export default async function Page(
               {book.numPages} trang
             </span>
           </div>
-          <div className="flex items-center space-x-10">
+          <div className="flex items-center space-x-5">
               <Ratings 
                   rating={book.avgRating}
                   variant="yellow" 
@@ -87,7 +85,7 @@ export default async function Page(
               <span className={cn("text-lg", nunito.className)}>{book.avgRating}/5</span>
               <span className="text-sm text-muted-foreground">{book.numOfRating} ratings</span>
           </div>
-          <div className="flex flex-wrap items-center px-0">
+          <div className="flex flex-wrap items-center">
             {book.genres.map((genre) => (
               <p 
                 key={genre}
@@ -98,29 +96,31 @@ export default async function Page(
             ))}
           </div>
           <div className="pt-6">
-            {/* <BorrowForm book={book} /> */}
+            <BorrowForm book={book} />
           </div>
         </div>
       </div>
-      <div className="md:grid md:grid-cols-2 justify-between space-x-52">
+      <div className="md:grid md:grid-cols-2 justify-between w-full gap-x-32">
         <TextField 
           label="Mô tả" 
           value={book.description == null ? "Không có" : book.description}
         />
-        <div className="md:grid hidden grid-cols-2 grid-rows-3 justify-between">
-          <div className="col-span-2">
-            <TextField 
-              label="Thư viện"
-              value=""
-            />
-          </div>
+        <div className="md:grid md:grid-cols-2 grid-rows-3 justify-between gap-y-10">
+          <TextField 
+            label="Thư viện"
+            value={lib.name}
+          />
+          <TextField 
+            label="Địa chỉ"
+            value={lib.address}
+          />
           <TextField
             label="Nhà xuất bản"
             value={book.publisher}
           />
           <TextField
             label="Ngày xuất bản"
-            value={(new Date(book.publishDate)).toLocaleDateString()}
+            value={ToDateString(book.publishDate)}
           />
           <TextField
             label="Ngôn ngữ"
