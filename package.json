@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
+    "next-dev": "next dev",
+    "fastapi-dev": "pipenv run python src/api/main.py",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -23,6 +25,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "concurrently": "^8.2.2",
     "lucide-react": "^0.381.0",
     "next": "14.2.3",
     "react": "^18",
