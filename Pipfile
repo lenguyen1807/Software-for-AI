@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pymongo = "*"
+beanie = "~=1.25.0"
+pydantic = "~=2.6.4"
+typing-extensions = "~=4.10.0"
+fastapi = "~=0.110.0"
+uvicorn = "~=0.29.0"
+motor = "~=3.3.2"
+pydantic-settings = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
