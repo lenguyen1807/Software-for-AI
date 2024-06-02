@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { GetBooks, GetBooksParam } from "@/lib/api";
 import BookCard from "@/components/user/book-card";
 import ScrollPane from "@/components/user/scroll-pane"
-import BookTable from "@/components/user/booktable";
+import BookTable from "@/components/user/book-table";
 // import HelpModal from "@/components/user/help-modal";
 // import dynamic from 'next/dynamic'
 
