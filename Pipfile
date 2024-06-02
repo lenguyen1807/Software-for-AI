@@ -4,14 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pymongo = "*"
+pymongo = "~=4.6.2"
 beanie = "~=1.25.0"
-pydantic = "~=2.6.4"
 typing-extensions = "~=4.10.0"
 fastapi = "~=0.110.0"
 uvicorn = "~=0.29.0"
 motor = "~=3.3.2"
 pydantic-settings = "*"
+pydantic = {extras = ["email"], version = "*"}
+pyjwt = "*"
 
 [dev-packages]
 
