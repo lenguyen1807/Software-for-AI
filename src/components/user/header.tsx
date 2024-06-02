@@ -1,14 +1,16 @@
-import Image from "next/image"
-import Link from "next/link"
+// import Image from "next/image"
+// import Link from "next/link"
 import SearchBox from "@/components/user/search-box"
 import UserAvatar from "@/components/user/avatar"
 import { userDummy } from "@/lib/dummy"
+import HelpModal from "@/components/user/help-modal"
+import NavBar from "@/components/user/nav-bar"
 
 export default function SiteHeader() {
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 max-w-screen-2xl items-center">
-                <div className="mr-4 hidden md:flex">
+                {/* <div className="mr-4 hidden md:flex">
                     <Link href="/user" className="mr-6 flex items-center space-x-2">
                         <Image
                             src="/logo.svg"
@@ -18,8 +20,10 @@ export default function SiteHeader() {
                         />
                         <span className="font-bold text-inherit hidden sm:inline-block">THƯ VIỆN BOBO</span>
                     </Link>
-                </div>
+                </div> */}
+                <NavBar />
                 <div className="flex flex-1 items-center justify-between space-x-7 md:justify-end">
+                    <HelpModal />
                     <div className="w-full flex-1 md:w-auto md:flex-none">
                         <SearchBox/>
                     </div>
