@@ -19,7 +19,7 @@ export default function HelpModal() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="bg-slate-500">
+                <Button variant="ringHover" className="bg-slate-500" size="sm">
                     <BadgeHelp className="mr-2 h-5 w-5"/>
                     Trợ giúp
                 </Button>
