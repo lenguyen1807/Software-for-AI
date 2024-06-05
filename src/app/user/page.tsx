@@ -12,7 +12,13 @@ import BookTable from "@/components/user/book-table";
 // import HelpModal from "@/components/user/help-modal";
 // import dynamic from 'next/dynamic'
 
-export default async function Page() {
+type Props = {
+    params: { userID: string };
+}
+
+export default async function Page(
+    { params }: Props
+) {
     // const thisMonth = (new Date().getMonth() + 1).toString(); 
     const books = await GetBooks();
     const hotBook = (await GetBooksParam({limit:1, page:1, sort_by:"-totalBorrow"}))[0];

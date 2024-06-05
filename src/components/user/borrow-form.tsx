@@ -34,7 +34,7 @@ export default function BorrowForm({book} : {book: Book}) {
       return (
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-slate-700">
+            <Button variant="gooeyLeft" className="bg-slate-700">
                 <BookPlus className="mr-2 h-5 w-5"/>
                 Mượn sách
             </Button>
