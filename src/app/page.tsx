@@ -1,5 +1,6 @@
 import Image from "next/image"
 import TabCard from "@/components/login/tab-card"
+import LibImg from "../../public/lib.jpg"
 
 function Quote({quote, author} : {quote: string, author: string}) {
     return (
@@ -41,11 +42,11 @@ export default function Page() {
             {/* <div className="hidden bg-muted lg:block relative"> */}
             <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex space-y-5">
                 <Image
-                    src="/lib.jpg"
+                    src={LibImg}
                     alt="Image"
                     fill
                     className="object-cover"
-                    priority
+                    placeholder="blur"
                 />
                 <Quote quote={"👌😭."} author={"New York Times"}/>
                 <Quote quote={"Đây là ứng dụng mượn sách kết hợp với thư viện tốt nhất mà tôi từng dùng."} author={"IGN"}/>
