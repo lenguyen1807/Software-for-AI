@@ -20,15 +20,15 @@ export default function TabCard() {
                 </TabsList>
 
                 <TabsContent value="user">
-                     <LoginCard description="Dành cho người mượn sách" isUser={true} />
+                     <LoginCard description="Dành cho người mượn sách" type={"user"} />
                 </TabsContent>
 
                 <TabsContent value="library">
-                    <LoginCard description="Dành cho thư viện" isUser={false}/>
+                    <LoginCard description="Dành cho thư viện" type={"library"}/>
                 </TabsContent>
 
                 <TabsContent value="admin">
-                    <LoginCard description="Dành cho quản trị viên" isUser={false}/>
+                    <LoginCard description="Dành cho quản trị viên" type={"admin"}/>
                 </TabsContent>
             </Tabs>
         </div>
