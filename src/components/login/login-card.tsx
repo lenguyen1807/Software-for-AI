@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import SignupModal from "@/components/login/signup-modal"
+import SignupForm from "@/components/login/signup-form"
 import LoginForm from "@/components/login/login-form"
 
 function SignUpAsk({isUser} : {isUser: boolean}) {
@@ -13,7 +13,7 @@ function SignUpAsk({isUser} : {isUser: boolean}) {
     return (
       <div className="mt-4 text-center text-sm">
         Chưa có tài khoản ? {" "}
-        <SignupModal />
+        <SignupForm />
       </div>
     )
   }
