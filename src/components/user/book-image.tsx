@@ -28,7 +28,7 @@ export default function BookImage({
     className
 } : Props) {
     return (
-        <HoverCard openDelay={100} closeDelay={100}>
+        <HoverCard openDelay={100} closeDelay={0}>
             <HoverCardTrigger asChild>
                 <Link
                     href={`/user/book/${book._id}`}
@@ -45,7 +45,10 @@ export default function BookImage({
                     />
                 </Link>
             </HoverCardTrigger>
-            <HoverCardContent side="right" className="border-8 w-[26rem]">
+            <HoverCardContent 
+                side="right" 
+                className="border-8 w-[26rem]"
+            >
                 <HoverContent book={book} />
             </HoverCardContent>
         </HoverCard>

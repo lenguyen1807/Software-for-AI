@@ -20,16 +20,27 @@ import {
   Stamp
 } from "lucide-react";
 import Link from "next/link";
+import { signOut } from '@/lib/auth';
+import { Button } from "../ui/button";
+import Image from "next/image";
 
 export default function UserAvatar({user} : {user: User}) {
+  async function SignOut() {
+    "use server" 
+    await signOut({ redirectTo: "/" });
+  }  
+
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <Avatar>
                 <AvatarImage 
-                  src={user.avatarURL} 
+                  src={user.avatarURL}
                   alt={user.username}
-                />
+                  asChild
+                >
+                  <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
+                </AvatarImage>
                 <AvatarFallback>User</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
@@ -67,13 +78,15 @@ export default function UserAvatar({user} : {user: User}) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link
-                href="/" 
+              <form 
                 className="flex"
+                action={SignOut}
               >
-                <LogOut color="#F25278" className="mr-2 h-5 w-5"/>
-                <span className="text-[#F25278]">Đăng xuất</span>
-              </Link>
+                <Button className="text-[#F25278]" variant="ghost">
+                  <LogOut className="mr-2 h-5 w-5"/>
+                  Đăng xuất
+                </Button>
+              </form>
             </DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>

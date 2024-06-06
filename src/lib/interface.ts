@@ -43,4 +43,15 @@ export interface Library {
     lateFeePerDay:  number;
     numOfRating:    number;
     avgRating:      number;
+    managerID: string;
 }
+
+export interface GetBookProps {
+    limit: number,
+    sort_by?: string | undefined,
+    genres?: string | undefined,
+    publisher?: string | undefined,
+    language?: string | undefined
+    series?: string | undefined,
+    author?: string | undefined
+};
