@@ -25,7 +25,5 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(new URL('/admin', request.url));
             }
         }
-    } else {
-        return NextResponse.redirect(new URL('/', request.url));
     }
 }

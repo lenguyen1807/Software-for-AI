@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useFormState, useFormStatus } from 'react-dom';
 import { LoginSchema as FormSchema } from "@/lib/zod";
 import { Authenciate } from "@/lib/action";
 
@@ -18,18 +17,34 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import PasswordModal from "@/components/login/pass-modal"
-import { TriangleAlert } from "lucide-react";
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export default function LoginForm({ type }: { type: string }) {
   const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema) });
-  const { pending } = useFormStatus();
-  const [ errorMessage, dispatch ] = useFormState(Authenciate, undefined);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  async function onSubmit(_data: z.infer<typeof FormSchema>) {
+    const response = await Authenciate(_data);
+    if (response) {
+      toast({
+        title: response,
+        variant: "destructive",
+        action: <ToastAction altText="signInAgain">Đăng nhập lại</ToastAction>
+      })
+    } else {
+      router.push("/");
+    }
+  }
 
   return (
     <Form {...form}>
       <form 
         className="space-y-6"
-        action={dispatch}
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
@@ -61,18 +76,18 @@ export default function LoginForm({ type }: { type: string }) {
           )}
         />
         <Button
-          aria-disabled={pending}
+          // aria-disabled={pending}
           type="submit" 
           className="w-full"
-          onClick={(event) => {
-            if (pending) {
-              event.preventDefault()
-            }
-          }}
+          // onClick={(event) => {
+          //   if (pending) {
+          //     event.preventDefault()
+          //   }
+          // }}
         >
           Đăng nhập
         </Button>
-        { errorMessage && 
+        {/* { errorMessage && 
           <div
             className="flex h-8 items-end space-x-1"
             aria-live="polite"
@@ -81,7 +96,7 @@ export default function LoginForm({ type }: { type: string }) {
             <TriangleAlert className="h-5 w-5 text-red-500" />
             <p className="text-sm text-red-500">{errorMessage}</p>
           </div> 
-        }
+        } */}
       </form>
     </Form>
   )

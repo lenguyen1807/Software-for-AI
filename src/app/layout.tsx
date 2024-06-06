@@ -29,7 +29,7 @@ export default function RootLayout({
         )}
       >
         <main>
-          {children}
+            {children}
           <SiteFooter/>
         </main>
         <Toaster />
