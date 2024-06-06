@@ -1,6 +1,6 @@
 "use server"
 
-import { auth, signIn } from "@/lib/auth";
+import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -29,16 +29,6 @@ export async function Authenciate(
         }
         throw error;
     } finally {
-        const data = await auth();
-        if (data) {
-            const role = (<any>data.user).role;
-            if (role === "user") {
-                redirect("/user");
-            } else if (role === "admin") {
-                redirect("/admin");
-            } else if (role === "library") {
-                redirect("/library");
-            }
-        }
+        redirect("/");
     }
 }

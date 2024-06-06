@@ -5,7 +5,6 @@ import { LoginSchema } from "@/lib/zod";
 import { ResolveURL } from "./utils";
 import { Library, User } from "@/lib/interface";
 import { jwtDecode } from "jwt-decode";
-import { cookies } from "next/headers";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -70,13 +69,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             session.user = token.user;
             return session;
         },
-    },
-    events: {
-        async signOut({ session, token }) {
-            cookies().set("Set-Cookie", "");
-            token = {};
-            session = {};
-        }
     },
     session: {
         strategy: "jwt",

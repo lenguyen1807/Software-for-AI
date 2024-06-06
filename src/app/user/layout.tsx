@@ -2,8 +2,6 @@ import SearchBox from "@/components/user/search-box"
 import HelpModal from "@/components/user/help-modal"
 import NavBar from "@/components/user/nav-bar"
 import UserAvatar from "@/components/user/avatar";
-import { Suspense } from 'react';
-import { Skeleton } from "@/components/skeletons";
 import { auth } from "@/lib/auth";
 import { User } from "@/lib/interface";
 
@@ -35,9 +33,7 @@ export default async function UserLayout({
         <div className="lg:border-l w-screen">
           <div className="h-full px-4 py-6 lg:px-8">
             <div className="border-md p-0 outline-none">
-              <Suspense fallback={<Skeleton/>}>
                 {children}
-              </Suspense>
             </div>
           </div>
         </div>

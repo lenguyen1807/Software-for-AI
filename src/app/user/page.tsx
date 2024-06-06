@@ -1,25 +1,10 @@
-// import {
-//   Tabs,
-//   TabsList,
-//   TabsTrigger,
-//   TabsContent
-// } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { GetBooks, GetBooksParam } from "@/lib/api";
 import BookCard from "@/components/user/book-card";
 import ScrollPane from "@/components/user/scroll-pane"
 import BookTable from "@/components/user/book-table";
-// import HelpModal from "@/components/user/help-modal";
-// import dynamic from 'next/dynamic'
 
-type Props = {
-    params: { userID: string };
-}
-
-export default async function Page(
-    { params }: Props
-) {
-    // const thisMonth = (new Date().getMonth() + 1).toString(); 
+export default async function Page() {
     const books = await GetBooks();
     const hotBook = (await GetBooksParam({limit:1, page:1, sort_by:"-totalBorrow"}))[0];
 
