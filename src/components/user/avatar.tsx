@@ -22,6 +22,7 @@ import {
 import Link from "next/link";
 import { signOut } from '@/lib/auth';
 import { Button } from "../ui/button";
+import Image from "next/image";
 
 export default function UserAvatar({user} : {user: User}) {
   async function SignOut() {
@@ -34,9 +35,12 @@ export default function UserAvatar({user} : {user: User}) {
         <DropdownMenuTrigger asChild>
             <Avatar>
                 <AvatarImage 
-                  src={user.avatarURL} 
+                  src={user.avatarURL}
                   alt={user.username}
-                />
+                  asChild
+                >
+                  <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
+                </AvatarImage>
                 <AvatarFallback>User</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>

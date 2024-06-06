@@ -34,10 +34,13 @@ export default function SignupForm() {
   const form = useForm<z.infer<typeof FormSchema>>({ resolver: zodResolver(FormSchema) });
 
   function onSubmit(_data: z.infer<typeof FormSchema>) {
-    axios.post(ResolveURL("register"), _data)
-    toast({
-      title: "Bạn đọc đã thực hiện đăng ký thành công",
-      description: "Xin vui lòng đợi để quản trị viên duyệt tài khoản của bạn độc. Cảm ơn bạn đọc vì đã chọn Bobo"
+    axios.post(ResolveURL("register"), {
+      username: _data.username,
+      name: _data.name,
+      password: _data.password,
+      email: _data.email
+    }).then((response) => {
+      console.log(response);
     })
   }
 
