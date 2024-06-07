@@ -23,47 +23,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { error } from "console"
-
-const rangeBorrowDays = Array.from({ length: 96 }, (_, i) => (i + 5).toString())
-
-const rangeLateFeePerDay = Array.from({ length: 1000 }, (_, i) => ((i + 1) * 1000).toString())
-
-const formSchema = z.object({
-    name: z.string().min(1, {
-        message: "Thông tin bắt buộc."
-    }),
-
-    username: z.string().min(7, {
-        message: "Tài khoản gồm 7-20 kí tự.",
-    }).max(20, {
-        message: "Tài khoản gồm 7-20 kí tự.",
-    }),
-
-    password: z.string().min(8, {
-        message: "Mật khẩu gồm ít nhất 8 kí tự."
-    }),
-
-    passwordConfirm: z.string(),
-
-    address: z.string().min(1, {
-        message: "Thông tin bắt buộc."
-    }),
-
-    maxBorrowDays: z.enum(rangeBorrowDays.map(String) as [string, ...string[]], {
-        message: "Thông tin bắt buộc."
-    }),
-
-    lateFeePerDay: z.enum(rangeLateFeePerDay.map(String) as [string, ...string[]], {
-        message: "Thông tin bắt buộc."
-    })
-
-}).refine((data) => {
-    return data.password === data.passwordConfirm
-}, {
-    message: "Mật khẩu nhập lại không khớp.",
-    path: ["passwordConfirm"]
-})
+import { LibrarySignUpSchema as formSchema } from "@/lib/zod"
+import { rangeBorrowDays, rangeLateFeePerDay } from "@/lib/utils"
 
 export function RegisterForm() {
     // 1. Define your form.

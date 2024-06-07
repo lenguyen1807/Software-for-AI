@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { rangeBorrowDays, rangeLateFeePerDay } from "@/lib/utils";
 
 export const LoginSchema = z.object({
   username: z
@@ -33,4 +34,40 @@ export const SignUpSchema = z.object({
       path: ["confirmPassword"]
     })
   }
+});
+
+export const LibrarySignUpSchema = z.object({
+  name: z.string().min(1, {
+    message: "Thông tin bắt buộc."
+  }),
+
+  username: z.string().min(7, {
+    message: "Tài khoản gồm 7-20 kí tự.",
+  }).max(20, {
+    message: "Tài khoản gồm 7-20 kí tự.",
+  }),
+
+  password: z.string().min(8, {
+    message: "Mật khẩu gồm ít nhất 8 kí tự."
+  }),
+
+  passwordConfirm: z.string(),
+
+  address: z.string().min(1, {
+    message: "Thông tin bắt buộc."
+  }),
+
+  maxBorrowDays: z.enum(rangeBorrowDays.map(String) as [string, ...string[]], {
+    message: "Thông tin bắt buộc."
+  }),
+
+  lateFeePerDay: z.enum(rangeLateFeePerDay.map(String) as [string, ...string[]], {
+    message: "Thông tin bắt buộc."
+  })
+
+}).refine((data) => {
+  return data.password === data.passwordConfirm
+}, {
+  message: "Mật khẩu nhập lại không khớp.",
+  path: ["passwordConfirm"]
 });
