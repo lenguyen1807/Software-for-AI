@@ -8,13 +8,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${nunito.className}`}>
+    <div className={`${nunito.className}`}>
+      <main className="w-full h-screen pl-[250px]">
         <SideBar />
-        <main className="w-full h-screen pl-[250px]">
-          {children}
-        </main>
-      </body>
-    </html>
+        {children}
+      </main>
+    </div>
   );
 }

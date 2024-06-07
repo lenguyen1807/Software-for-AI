@@ -212,24 +212,18 @@ export const columns: ColumnDef<Book>[] = [
     },
     {
         accessorKey: "author",
-        header: <div className="text-center">Tác giả</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("author")}</div>
-        ),
+        header: () => <div className="text-center">Tác giả</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("author")}</div>,
     },
     {
         accessorKey: "genre",
-        header: <div className="text-center">Thể loại</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("genre")}</div>
-        ),
+        header: () => <div className="text-center">Thể loại</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("genre")}</div>,
     },
     {
         accessorKey: "publisher",
-        header: <div className="text-center">Nhà xuất bản</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("publisher")}</div>
-        ),
+        header: () => <div className="text-center">Nhà xuất bản</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("publisher")}</div>,
     },
     {
         accessorKey: "library",
@@ -267,10 +261,8 @@ export const columns: ColumnDef<Book>[] = [
     },
     {
         accessorKey: "status",
-        header: <div className="text-center">Trạng thái</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("status")}</div>
-        ),
+        header: () => <div className="text-center">Trạng thái</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("status")}</div>,
     },
     {
         id: "actions",

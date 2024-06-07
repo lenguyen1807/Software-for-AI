@@ -122,17 +122,13 @@ export const columns: ColumnDef<Accounts>[] = [
     },
     {
         accessorKey: "address",
-        header: <div className="text-center">Địa chỉ</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("address")}</div>
-        ),
+        header: () => <div className="text-center">Địa chỉ</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("address")}</div>,
     },
     {
         accessorKey: "status",
-        header: <div className="text-center">Trạng thái</div>,
-        cell: ({ row }) => (
-            <div className="text-center">{row.getValue("status")}</div>
-        ),
+        header: () => <div className="text-center">Trạng thái</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("status")}</div>,
     },
     {
         id: "actions",
