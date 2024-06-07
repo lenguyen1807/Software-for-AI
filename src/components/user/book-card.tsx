@@ -51,7 +51,7 @@ export default function BookCard({
                     <span className="text-muted-foreground text-sm">{book.avgRating}/5</span>
                 </div> */}
                 <h3 
-                    className={cn(nunito.className, "text-lg")}
+                    className={cn(nunito.className, "text-lg w-3/4")}
                 >
                     {book.title}
                 </h3>

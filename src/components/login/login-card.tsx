@@ -1,5 +1,3 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -7,24 +5,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import SignupForm from "@/components/login/signup-form"
+import LoginForm from "@/components/login/login-form"
 
 function SignUpAsk({isUser} : {isUser: boolean}) {
   if (isUser) {
     return (
       <div className="mt-4 text-center text-sm">
-          Chưa có tài khoản ? {" "}
-        <Link href="/sign_up" className="underline">
-          Đăng ký
-        </Link>
+        Chưa có tài khoản ? {" "}
+        <SignupForm />
       </div>
     )
   }
   return null;
 }
 
-export default function LoginCard({description, isUser} : {description: string, isUser: boolean}) {
+export default function LoginCard({description, type} : {description: string, type: string}) {
   return (
     <Card>
       <CardHeader>
@@ -34,24 +30,9 @@ export default function LoginCard({description, isUser} : {description: string, 
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="username">Tài khoản</Label>
-            <Input></Input>
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Mật khẩu</Label>
-              <Link href="/forgot_password" className="ml-auto inline-block text-sm underline">
-                Quên mật khẩu ?
-              </Link>
-            </div>
-            <Input id="password" type="password" required />
-          </div>
-          <Button type="submit" className="w-full">
-            Đăng nhập
-          </Button>
-          <SignUpAsk isUser={isUser} />
+        <div className="space-y-6">
+          <LoginForm type={type} />
+          <SignUpAsk isUser={type == "user"} />
         </div>
       </CardContent>
     </Card>
