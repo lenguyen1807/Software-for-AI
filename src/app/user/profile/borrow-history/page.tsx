@@ -1,23 +1,50 @@
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import { DataTable } from "@/components/user/history-table";
+import { GetBookByID, GetLibraryByID, GetUserBorrows } from "@/lib/api";
+import { BorrowHistory } from "@/lib/interface";
+import { ColumnDef } from "@tanstack/react-table"
 
-import { Input } from "@/components/ui/input"
+export const columns: ColumnDef<BorrowHistory>[] = [
+    {
+        accessorKey: "borrowDate",
+        header: "Ngày mượn",
+    },
+    {
+        accessorKey: "returnDate",
+        header: "Ngày trả",
+    },
+    {
+        accessorKey: "bookTitle",
+        header: "Tiêu đề",
+    },
+    {
+        accessorKey: "library",
+        header: "Thư viện",
+    },
+    {
+        accessorKey: "status",
+        header: "Trạng thái",
+    },
+]
 
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
+export default async function History() {
+    const borrows = await GetUserBorrows();
 
-export default function History() {
+    const data = await Promise.all(
+        borrows.map(async (item: any) => {
+            const book = await GetBookByID(item.bookID);
+            const lib = await GetLibraryByID(item.libraryID);
+            return {
+                ...item,
+                bookTitle: book.title,
+                library: lib.name,
+                status: item.status === 'not returned' ? 'Đang mượn' : 'Đã trả'
+            };
+        })
+    );
+
     return (
-        <div className="grid gap-6">
-            <Card x-chunk="dashboard-04-chunk-1">
-                Borrowing History
-            </Card>
+        <div>
+            <DataTable columns={columns} data={data} />
         </div>
     )
 }
