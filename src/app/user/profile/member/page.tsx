@@ -5,7 +5,7 @@ import MemberCard from "@/components/user/member-card"
 import { Plus } from "lucide-react";
 
 export default async function Member() {
-    const memberCards = (await auth())?.user as User;
+    const libIDs = (await auth())?.user as User;
 
     return (
         <div className="grid gap-6">
@@ -15,8 +15,8 @@ export default async function Member() {
                 </Button>
             </div>
             <div className="grid grid-cols-2 gap-6">
-                {memberCards.listOfLib.map((lib) => (
-                    <MemberCard lib={lib} />
+                {libIDs.listOfLib.map((id) => (
+                    <MemberCard libID={id} />
                 ))}
             </div>
         </div>
