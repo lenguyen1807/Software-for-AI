@@ -43,7 +43,7 @@ export interface Library {
     lateFeePerDay:  number;
     numOfRating:    number;
     avgRating:      number;
-    managerID: string;
+    managerID:      string;
 }
 
 export interface GetBookProps {
@@ -55,3 +55,12 @@ export interface GetBookProps {
     series?: string | undefined,
     author?: string | undefined
 };
+
+export interface BorrowHistory {
+    _id:        string;
+    borrowDate: string;
+    returnDate: string;
+    bookTitle: string;
+    library:    string;
+    status:     "Đang mượn" | "Đã trả";
+}
