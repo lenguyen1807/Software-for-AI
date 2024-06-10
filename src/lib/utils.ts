@@ -48,6 +48,6 @@ export const slugify = (...args: (string | number)[]): string => {
         .replace(/\s+/g, '-') // separator
 }
 
-export const rangeBorrowDays = Array.from({ length: 96 }, (_, i) => (i + 5).toString());
+export const rangeBorrowDays = Array.from({ length: 10 }, (_, i) => (i + 5).toString());
 
 export const rangeLateFeePerDay = Array.from({ length: 1000 }, (_, i) => ((i + 1) * 1000).toString());

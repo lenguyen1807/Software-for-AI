@@ -1,10 +1,24 @@
-import NextAuth from "next-auth"
+import NextAuth, { type DefaultSession } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { GetLoginToken } from "@/lib/api";
+import { GetLoginData } from "@/lib/api";
 import { LoginSchema } from "@/lib/zod";
 import { ResolveURL } from "./utils";
 import { Library, User } from "@/lib/interface";
-import { jwtDecode } from "jwt-decode";
+
+// declare module "next-auth" {
+//   interface Session { user: {
+//         token: string,
+//         role: string
+//     } & DefaultSession["user"] & (User | Library | undefined)
+//   }
+
+//   interface JWT {
+//     user: {
+//         token: string,
+//         role: string
+//     } & DefaultSession["user"] & (User | Library | undefined)
+//   }
+// }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -15,8 +29,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
             authorize: async (credentials) => {
                 const { username, password } = await LoginSchema.parseAsync(credentials)
-                const token = await GetLoginToken({ username, password });
-                const role = (<any>jwtDecode(token)).role;
+
+                const data = await GetLoginData({ username, password });
+                const token: string = data.access_token;
+                const role: string = data.role;
 
                 if (token && role === "user") {
                     const response = await fetch(ResolveURL("user/info"), {
@@ -51,7 +67,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 }
 
                 if (token && role === "admin") {
-
+                    return {
+                        jwt: token,
+                        role: role
+                    }
                 }
 
                 return null;

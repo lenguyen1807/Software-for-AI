@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { ZodRawShape, z } from "zod"
 import { rangeBorrowDays, rangeLateFeePerDay } from "@/lib/utils";
 
 export const LoginSchema = z.object({
@@ -9,7 +9,7 @@ export const LoginSchema = z.object({
     .string()
 })
 
-export const SignUpSchema = z.object({
+const SignUpSchema = z.object({
   username: z
     .string({required_error: "Tên đăng nhập là bắt buộc"})
     .min(4, { message: "Tên đăng nhập phải có ít nhất 4 ký tự" }),
@@ -24,50 +24,45 @@ export const SignUpSchema = z.object({
   email: z
     .string({required_error: "Email là bắt buộc"})
     .email("Đây là email không hợp lệ"),
-  birthday: z
-    .date( {required_error: "Ngày sinh là bắt buộc"} )
-}).superRefine(({ password, confirmPassword }, ctx) => {
-  if (password != confirmPassword) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Mật khẩu không khớp",
-      path: ["confirmPassword"]
-    })
-  }
+  address: z
+    .string()
 });
 
-export const LibrarySignUpSchema = z.object({
-  name: z.string().min(1, {
-    message: "Thông tin bắt buộc."
-  }),
+export function MergeSignUp(schema: ZodRawShape) {
+  return SignUpSchema
+    .extend(schema)
+    .superRefine(({ password, confirmPassword }, ctx) => {
+      if (password != confirmPassword) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Mật khẩu không khớp",
+          path: ["confirmPassword"]
+        })
+      }
+    });
+}
 
-  username: z.string().min(7, {
-    message: "Tài khoản gồm 7-20 kí tự.",
-  }).max(20, {
-    message: "Tài khoản gồm 7-20 kí tự.",
-  }),
+export const UserSignUpSchema = MergeSignUp({
+  birthday: z
+    .date( {required_error: "Ngày sinh là bắt buộc"} ),
+})
 
-  password: z.string().min(8, {
-    message: "Mật khẩu gồm ít nhất 8 kí tự."
-  }),
+export const LibrarySignUpSchema = MergeSignUp({
+  // maxBorrowDays: z.enum(rangeBorrowDays.map(String) as [string, ...string[]], {
+  //   message: "Thông tin bắt buộc."
+  // }),
+  maxBorrowDays: z.number().min(1, {message: "Số ngày mượn tối đa phải ít nhất là 1"}),
+  // lateFeePerDay: z.enum(rangeLateFeePerDay.map(String) as [string, ...string[]], {
+  //   message: "Thông tin bắt buộc."
+  // })
+  lateFreePerDay: z.number().min(1, {message: "Số tiền phạt trễ ít nhất là 1 nghìn đồng"}),
+})
 
-  passwordConfirm: z.string(),
-
-  address: z.string().min(1, {
-    message: "Thông tin bắt buộc."
-  }),
-
-  maxBorrowDays: z.enum(rangeBorrowDays.map(String) as [string, ...string[]], {
-    message: "Thông tin bắt buộc."
-  }),
-
-  lateFeePerDay: z.enum(rangeLateFeePerDay.map(String) as [string, ...string[]], {
-    message: "Thông tin bắt buộc."
-  })
-
-}).refine((data) => {
-  return data.password === data.passwordConfirm
-}, {
-  message: "Mật khẩu nhập lại không khớp.",
-  path: ["passwordConfirm"]
+export const InfoLibrarySchema = z.object({
+    name: z.string(),
+    address: z.string(),
+    description: z.string(),
+    maxBorrowDays: z.number(),
+    lateFeePerDay: z.number(),
+    username: z.string(),
 });

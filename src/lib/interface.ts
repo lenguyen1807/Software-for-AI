@@ -3,12 +3,12 @@ export interface User {
     name: string;
     avatarURL: string;
     username: string;
-    password: string;
     dateOfBirth: string;
     role: string;
     email: string;
     listOfLib: string[];
     address: string;
+    status: boolean;
 };
 
 export interface Book {
