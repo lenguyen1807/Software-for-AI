@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from 'next/navigation';
 
 export default function ProfilePage({
     children,
@@ -9,6 +10,14 @@ export default function ProfilePage({
     children: React.ReactNode;
 }>) {
     const [activeLink, setActiveLink] = useState("");
+
+    const pathname = usePathname();
+
+    useEffect(() => {
+        setActiveLink(pathname);
+    }, [pathname]);
+
+    console.log(pathname)
 
     return (
         <div className="flex flex-1 flex-col h-min-full gap-4 md:gap-8 md:p-10 min-h-[500px]">
@@ -19,22 +28,25 @@ export default function ProfilePage({
                 <nav
                     className="grid gap-4 text-sm text-muted-foreground" x-chunk="dashboard-04-chunk-0"
                 >
-                    <Link href="/user/profile"
+                    <Link
+                        href="/user/profile"
                         className={`${activeLink === "/user/profile" ? "text-black font-medium" : ""}`}
-                        onClick={() => setActiveLink("/user/profile")}>
+                    >
                         Thông tin cá nhân
                     </Link>
 
-                    <Link href="/user/profile/member"
+                    <Link
+                        href="/user/profile/member"
                         className={`${activeLink === "/user/profile/member" ? "text-black font-medium" : ""}`}
-                        onClick={() => setActiveLink("/user/profile/member")}>
+                    >
                         Thẻ thư viện
                     </Link>
 
 
-                    <Link href="/user/profile/borrow-history"
+                    <Link
+                        href="/user/profile/borrow-history"
                         className={`${activeLink === "/user/profile/borrow-history" ? "text-black font-medium" : ""}`}
-                        onClick={() => setActiveLink("/user/profile/borrow-history")}>
+                    >
                         Lịch sử mượn sách
                     </Link>
                 </nav>
