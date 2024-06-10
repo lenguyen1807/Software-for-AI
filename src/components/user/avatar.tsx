@@ -33,7 +33,7 @@ export default function UserAvatar({user} : {user: User}) {
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Avatar>
+        <Avatar className="ring-1 ring-slate-200">
                 <AvatarImage 
                   src={user.avatarURL}
                   alt={user.username}
