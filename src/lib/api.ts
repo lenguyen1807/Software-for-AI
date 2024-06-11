@@ -36,22 +36,20 @@ export async function GetLoginToken({...props} : {username: string, password: st
     return res.data.access_token;
 }
 
-export async function GetUserLibrary() {
+export async function GetUserLibrary(token: string) {
     const res = await axios.get(ResolveURL("user/libraries"), {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxMDA0MzMuNzcwNjkzMywiaWQiOiI2MGQ5ZjRmMWUxYTNlNTZhM2MzZjNiM2YiLCJyb2xlIjoidXNlciJ9.xJqDaUTyGsXlt6rqREvr8wq0-PLrRrp40jWXzYDveOo`
-                        }
-                    });
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
     return res.data as Library[];
 }
 
-export async function GetUserBorrows() {
+export async function GetUserBorrows(token: string) {
     const res = await axios.get(ResolveURL("user/borrows"), {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxMDA0MzMuNzcwNjkzMywiaWQiOiI2MGQ5ZjRmMWUxYTNlNTZhM2MzZjNiM2YiLCJyb2xlIjoidXNlciJ9.xJqDaUTyGsXlt6rqREvr8wq0-PLrRrp40jWXzYDveOo`
-                        }
-                    });
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
     return res.data as Book[];
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState, useRef } from 'react';
+import { useRef } from 'react';
 import {
     Avatar,
     AvatarFallback,

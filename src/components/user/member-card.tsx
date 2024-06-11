@@ -1,5 +1,3 @@
-// "use client"
-
 import { CalendarDays, X } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import {
@@ -8,13 +6,12 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { GetLibraryByID } from "@/lib/api"
 import { Library } from "@/lib/interface"
 
 export default async function MemberCard({ lib }: { lib: Library }) {
     return (
         <Card className="relative p-[20px] hover:bg-gray-100/50 cursor-pointer">
-            <div className="grid grid-cols-10 flex space-x-[30px] ml-2 items-center">
+            <div className="grid grid-cols-10 space-x-[30px] ml-2 items-center">
                 <Avatar className="ring-1 ring-slate-200">
                     <AvatarImage src={lib.avatarImageUrl} />
                     <AvatarFallback>{lib.name[0].toUpperCase()}</AvatarFallback>
