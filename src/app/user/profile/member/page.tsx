@@ -17,7 +17,7 @@ export default async function Member() {
             </div>
             <div className="grid grid-cols-2 gap-6">
                 {libs.map((lib) => (
-                    <MemberCard lib={lib} />
+                    <MemberCard key={lib._id} lib={lib} />
                 ))}
             </div>
         </div>

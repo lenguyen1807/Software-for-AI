@@ -37,6 +37,7 @@ const ListItem = React.forwardRef<
       </NavigationMenuLink>
   )
 })
+ListItem.displayName = "ListItem";
 
 export default function NavBar() {
     const pathname = usePathname();
