@@ -34,7 +34,7 @@ export default function AccountAdminTable({data} : {data: User[]}) {
     const [rowSelection, setRowSelection] = useState({})
 
     const handleDelete = useCallback(DeleteUser, []);
-    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
+    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [data]);
 
     const table = useReactTable({
         data,
