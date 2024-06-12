@@ -9,7 +9,6 @@ export default async function ManageAccount() {
 
     const res = await fetch(ResolveURL("user?get_all=true"), {
         method: "GET",
-        next: { revalidate: 30 * 60 },
         headers: {
             "Authorization": `Bearer ${token}`
         }

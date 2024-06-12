@@ -1,7 +1,10 @@
 "use client"
 
-import { useState } from "react";
-import { columns } from "@/components/admin/account-table/columns";
+import { useCallback, useMemo, useState } from "react";
+import { getColumns } from "@/components/admin/account-table/columns";
+import { User } from "@/lib/interface";
+import { DeleteUser } from "@/lib/action";
+
 import {
     ColumnFiltersState,
     SortingState,
@@ -23,13 +26,15 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { User } from "@/lib/interface";
 
 export default function AccountAdminTable({data} : {data: User[]}) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
+
+    const handleDelete = useCallback(DeleteUser, []);
+    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
 
     const table = useReactTable({
         data,

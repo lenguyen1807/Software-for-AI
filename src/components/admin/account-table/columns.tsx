@@ -12,14 +12,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { DeleteUser } from "@/lib/action";
 import { ColumnDef} from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
+import { ToDateID } from "@/lib/utils";
 
-export const columns: ColumnDef<User>[] = [
-    {
-        accessorKey: "_id",
-    },
+export const getColumns = ({ onDelete }: { onDelete: (id: string, token: string) => void }): ColumnDef<User>[] => [ 
     {
         accessorKey: "username",
         header: ({ column }) => {
@@ -78,6 +75,23 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ row }) => <div className="text-center">{row.getValue("address")}</div>,
     },
     {
+        accessorKey: "_id",
+        header: ({ column }) => {
+            return (
+                <div className="flex justify-center items-center">
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Ngày tạo tài khoản
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
+        cell: ({ row }) => <div className="text-center">{ToDateID(row.getValue("_id"))}</div>,
+    },
+    {
         accessorKey: "status",
         header: () => <div className="text-center">Trạng thái</div>,
         cell: ({ row }) => <div className="text-center">{
@@ -105,7 +119,11 @@ export const columns: ColumnDef<User>[] = [
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Huỷ</AlertDialogCancel>
-                            <AlertDialogAction onClick={async () => DeleteUser(row.getValue("_id"), token)}>
+                            <AlertDialogAction 
+                                onClick={
+                                    async () => onDelete(row.getValue("_id"), token)
+                                }
+                            >
                                 Tiếp tục
                             </AlertDialogAction>
                         </AlertDialogFooter>
