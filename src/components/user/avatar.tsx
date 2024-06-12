@@ -32,10 +32,9 @@ export default function UserAvatar({user} : {user: User}) {
                 <AvatarImage 
                   src={user.avatarURL}
                   alt={user.username}
-                  asChild
-                >
-                  <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
-                </AvatarImage>
+                />
+                  {/* <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
+                </AvatarImage> */}
                 <AvatarFallback>User</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
