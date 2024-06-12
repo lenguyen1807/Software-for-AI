@@ -1,7 +1,6 @@
 import { Book, GetBookProps, Library } from "@/lib/interface";
 import { ResolveURL } from "@/lib/utils";
 import axios from 'axios';
-import { auth } from "./auth";
 
 export async function GetBooks() {
     const res = await axios.get(ResolveURL("books"));
@@ -35,4 +34,22 @@ export async function GetLibraryBook({ID, page} : {ID: string, page: number}) {
 export async function GetLoginData({...props} : {username: string, password: string}) {
     const res = await axios.post(ResolveURL(`login`), null, { params: props});
     return res.data;
+}
+
+export async function GetUserLibrary(token: string) {
+    const res = await axios.get(ResolveURL("user/libraries"), {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+    return res.data as Library[];
+}
+
+export async function GetUserBorrows(token: string) {
+    const res = await axios.get(ResolveURL("user/borrows"), {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+    return res.data as Book[];
 }

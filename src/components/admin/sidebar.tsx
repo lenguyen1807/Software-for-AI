@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { SignOut } from "@/lib/action"
+import Image from "next/image"
 
 const menuList = [
     {
@@ -45,7 +46,12 @@ export default function SideBar() {
     return (
         <div className='fixed left-0 top-0 flex flex-col space-y-[20px] min-w-[250px] min-h-screen border-r px-[10px] pt-[25px] pb-[40px] bg-[#F9FAFB]'>
             <div className='flex items-center pl-[15px] gap-[20px]'>
-                <img src="/LOGO.svg" alt="Logo" className="h-[36px]" />
+                <Image
+                    src="/logo.svg"
+                    alt="Logo"
+                    width="60"
+                    height="50"
+                />
                 <span className='italic text-[24px] font-black text-[#000938] leading-none'>
                     BOBO
                 </span>

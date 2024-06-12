@@ -62,6 +62,6 @@ export interface BorrowHistory {
     borrowDate: string;
     returnDate: string;
     bookTitle: string;
-    library:    string;
-    status:     "Đang mượn" | "Đã trả";
+    library: string;
+    status: "Đang mượn" | "Đã trả";
 }

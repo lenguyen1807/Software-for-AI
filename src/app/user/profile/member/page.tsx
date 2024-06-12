@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button"
 import MemberCard from "@/components/user/member-card"
 import { GetUserLibrary } from "@/lib/api";
+import { auth } from "@/lib/auth";
 import { Plus } from "lucide-react";
 
 export default async function Member() {
-    const libs = await GetUserLibrary();
-    console.log(libs)
+    const user = (await auth())?.user;
+    const libs = await GetUserLibrary(user.jwt);
+
     return (
         <div className="grid gap-6">
             <div className="flex justify-end">
@@ -15,7 +17,7 @@ export default async function Member() {
             </div>
             <div className="grid grid-cols-2 gap-6">
                 {libs.map((lib) => (
-                    <MemberCard lib={lib} />
+                    <MemberCard key={lib._id} lib={lib} />
                 ))}
             </div>
         </div>

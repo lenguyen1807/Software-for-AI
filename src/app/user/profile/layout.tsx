@@ -1,21 +1,10 @@
-"use client"
-
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { usePathname } from 'next/navigation';
+import ProfileSidebar from "@/components/user/profile-sidebar";
 
 export default function ProfilePage({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const [activeLink, setActiveLink] = useState("");
-
-    const pathname = usePathname();
-
-    useEffect(() => {
-        setActiveLink(pathname);
-    }, [pathname]);
 
     return (
         <div className="flex flex-1 flex-col h-min-full gap-4 md:gap-8 md:p-10 min-h-[500px]">
@@ -23,31 +12,7 @@ export default function ProfilePage({
                 <h1 className="text-3xl font-semibold">Cài đặt</h1>
             </div>
             <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-                <nav
-                    className="grid gap-4 text-sm text-muted-foreground" x-chunk="dashboard-04-chunk-0"
-                >
-                    <Link
-                        href="/user/profile"
-                        className={`${activeLink === "/user/profile" ? "text-black font-medium" : ""}`}
-                    >
-                        Thông tin cá nhân
-                    </Link>
-
-                    <Link
-                        href="/user/profile/member"
-                        className={`${activeLink === "/user/profile/member" ? "text-black font-medium" : ""}`}
-                    >
-                        Thẻ thư viện
-                    </Link>
-
-
-                    <Link
-                        href="/user/profile/borrow-history"
-                        className={`${activeLink === "/user/profile/borrow-history" ? "text-black font-medium" : ""}`}
-                    >
-                        Lịch sử mượn sách
-                    </Link>
-                </nav>
+                <ProfileSidebar />
                 <main>
                     {children}
                 </main>

@@ -1,33 +1,11 @@
 import { DataTable } from "@/components/user/history-table";
 import { GetBookByID, GetLibraryByID, GetUserBorrows } from "@/lib/api";
-import { BorrowHistory } from "@/lib/interface";
-import { ColumnDef } from "@tanstack/react-table"
-
-export const columns: ColumnDef<BorrowHistory>[] = [
-    {
-        accessorKey: "borrowDate",
-        header: "Ngày mượn",
-    },
-    {
-        accessorKey: "returnDate",
-        header: "Ngày trả",
-    },
-    {
-        accessorKey: "bookTitle",
-        header: "Tiêu đề",
-    },
-    {
-        accessorKey: "library",
-        header: "Thư viện",
-    },
-    {
-        accessorKey: "status",
-        header: "Trạng thái",
-    },
-]
+import { auth } from "@/lib/auth";
+import { columns } from "@/components/user/borrow-column"
 
 export default async function History() {
-    const borrows = await GetUserBorrows();
+    const user = (await auth())?.user;
+    const borrows = await GetUserBorrows(user.jwt);
 
     const data = await Promise.all(
         borrows.map(async (item: any) => {
