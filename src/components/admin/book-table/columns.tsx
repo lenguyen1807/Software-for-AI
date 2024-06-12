@@ -1,7 +1,8 @@
 "use client"
 
 import { Book } from "@/lib/interface";
-import { ColumnDef, Table } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
+import { ToDateID } from "@/lib/utils";
 import { ArrowUpDown, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,17 +16,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { useMemo } from "react";
+import { useSession } from "next-auth/react";
 
-export interface TableProps extends Book {
-    status: "Đang hoạt động" | "Bị khóa",
-    importDate: string,
-    library: string
-}
-
-export const columns: ColumnDef<TableProps>[] = useMemo<
-ColumnDef<TableProps>[]> ( 
-() => [
+export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) => void}) : ColumnDef<Book>[] => [
     {
         accessorKey: "title",
         header: ({ column }) => {
@@ -46,21 +39,42 @@ ColumnDef<TableProps>[]> (
     },
     {
         accessorKey: "author",
-        header: () => <div className="text-center">Tác giả</div>,
+        header: ({ column }) => {
+            return (
+                <div className="flex justify-center items-center">
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Tác giả
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+
+            )
+        },
         cell: ({ row }) => <div className="text-center">{row.getValue("author").join(", ")}</div>,
     },
     {
-        accessorKey: "genres",
-        header: () => <div className="text-center">Thể loại</div>,
-        cell: ({ row }) => <div className="text-center">{row.getValue("genres").join(", ")}</div>
-    },
-    {
         accessorKey: "publisher",
-        header: () => <div className="text-center">Nhà xuất bản</div>,
+        header: ({ column }) => {
+            return (
+                <div className="flex justify-center items-center">
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Nhà xuất bản
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+
+            )
+        },
         cell: ({ row }) => <div className="text-center">{row.getValue("publisher")}</div>,
     },
     {
-        accessorKey: "library",
+        accessorKey: "libraryName",
         header: ({ column }) => {
             return (
                 <div className="flex justify-center items-center">
@@ -74,10 +88,10 @@ ColumnDef<TableProps>[]> (
                 </div>
             )
         },
-        cell: ({ row }) => <div className="text-center">{row.getValue("library")}</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("libraryName")}</div>,
     },
     {
-        accessorKey: "importDate",
+        accessorKey: "_id",
         header: ({ column }) => {
             return (
                 <div className="flex justify-center items-center">
@@ -91,17 +105,15 @@ ColumnDef<TableProps>[]> (
                 </div>
             )
         },
-        cell: ({ row }) => <div className="text-center">{row.getValue("importDate")}</div>,
-    },
-    {
-        accessorKey: "status",
-        header: () => <div className="text-center">Trạng thái</div>,
-        cell: ({ row }) => <div className="text-center">{row.getValue("status")}</div>,
+        cell: ({ row }) => <div className="text-center">{ToDateID(row.getValue("_id"))}</div>,
     },
     {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
+            const { data: session, status } = useSession();
+            const token = session?.user.jwt;
+
             return (
                 <AlertDialog>
                     <AlertDialogTrigger>
@@ -116,11 +128,17 @@ ColumnDef<TableProps>[]> (
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Huỷ</AlertDialogCancel>
-                            <AlertDialogAction>Tiếp tục</AlertDialogAction>
+                            <AlertDialogAction
+                                onClick={
+                                    async() => onDelete(row.getValue("_id"), token)
+                                }
+                            >
+                                Tiếp tục
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
             )
         },
     },
-], []);
+];

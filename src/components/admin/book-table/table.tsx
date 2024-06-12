@@ -1,8 +1,10 @@
 "use client"
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { getColumns } from "@/components/admin/book-table/columns";
+import { type Book } from "@/lib/interface";
+import { DeleteBook } from "@/lib/action";
 
-import { columns, type TableProps } from "@/components/admin/book-table/columns";
 import {
     ColumnFiltersState,
     SortingState,
@@ -25,11 +27,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function BookAdminTable({data} : {data: TableProps[]}) {
+export default function BookAdminTable({data} : {data: Book[]}) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
+
+    const handleDelete = useCallback(DeleteBook, []);
+    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [data]);
 
     const table = useReactTable({
         data,
