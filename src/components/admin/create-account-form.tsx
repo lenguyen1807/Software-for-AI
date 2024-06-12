@@ -34,13 +34,12 @@ import {
 } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar-extended";
 import { Calendar as CalendarIcon } from "lucide-react"
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { UserSignUpSchema } from "@/lib/zod";
 import { Textarea } from "@/components/ui/textarea";
 import axios, { AxiosError } from "axios";
-import { Jacquarda_Bastarda_9 } from "next/font/google";
 import { User } from "@/lib/interface";
 
 const steps = [
@@ -94,7 +93,46 @@ function SignUpForm({token} : {token: string}) {
     const { nextStep } = useStepper();
 
     function onSubmit(_data: z.infer<typeof UserSignUpSchema>) {
-        nextStep();
+        axios.post(ResolveURL("user"), {
+            username: _data.username,
+            name: _data.name,
+            password: _data.password,
+            email: _data.email,
+            dateOfBirth: _data.birthday.toLocaleDateString("vi-VN", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric"
+            }).split("/").reverse().join("-"),
+            address: _data.address,
+            role: "library"
+        }, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then((response) => {
+            if (response.status === 200) {
+                toast({
+                    title: "Đăng ký thành công",
+                })
+            } 
+            nextStep();
+        }).catch((error) => {
+            switch(error.response.status) {
+                case 500:
+                    toast({
+                    title: "Trùng thông tin",
+                    variant: "destructive",
+                    action: <ToastAction altText="ok">Đăng ký lại</ToastAction>
+                    })
+                default:
+                    toast({
+                    title: "Có lỗi gì đó xảy ra rồi",
+                    variant: "destructive",
+                    action: <ToastAction altText="again">Đăng ký lại</ToastAction>
+                    })
+            }
+            throw error;
+        })
     }
 
     return (
@@ -254,14 +292,29 @@ function InfoForm({token} : {token: string}) {
                 managerID: user._id,
                 slug: slugify(_data.name),
                 ..._data
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             }).then((response) => {
-
+                if (response.status === 200) {
+                    toast({
+                        title: "Tạo thư viện thành công",
+                    })
+                } 
             }).catch((error) => {
-                console.log(error);
+                switch(error.response.status) {
+                    default:
+                        toast({
+                            title: "Có lỗi gì đó xảy ra rồi",
+                            variant: "destructive",
+                        })
+                }
+                throw error;
             })
         }).catch((error) => {
             if (error instanceof(AxiosError)) {
-                console.log(error);
+                throw error;
             } else {
                 if (error === "Not an library") {
                     toast({
