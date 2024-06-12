@@ -1,4 +1,5 @@
-import { z } from "zod"
+import { ZodRawShape, z } from "zod"
+import { rangeBorrowDays, rangeLateFeePerDay } from "@/lib/utils";
 
 export const LoginSchema = z.object({
   username: z
@@ -8,7 +9,7 @@ export const LoginSchema = z.object({
     .string()
 })
 
-export const SignUpSchema = z.object({
+const SignUpSchema = z.object({
   username: z
     .string({required_error: "Tên đăng nhập là bắt buộc"})
     .min(4, { message: "Tên đăng nhập phải có ít nhất 4 ký tự" }),
@@ -23,14 +24,45 @@ export const SignUpSchema = z.object({
   email: z
     .string({required_error: "Email là bắt buộc"})
     .email("Đây là email không hợp lệ"),
+  address: z
+    .string()
+});
+
+export function MergeSignUp(schema: ZodRawShape) {
+  return SignUpSchema
+    .extend(schema)
+    .superRefine(({ password, confirmPassword }, ctx) => {
+      if (password != confirmPassword) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Mật khẩu không khớp",
+          path: ["confirmPassword"]
+        })
+      }
+    });
+}
+
+export const UserSignUpSchema = MergeSignUp({
   birthday: z
-    .date( {required_error: "Ngày sinh là bắt buộc"} )
-}).superRefine(({ password, confirmPassword }, ctx) => {
-  if (password != confirmPassword) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Mật khẩu không khớp",
-      path: ["confirmPassword"]
-    })
-  }
+    .date( {required_error: "Ngày sinh là bắt buộc"} ),
+})
+
+export const LibrarySignUpSchema = MergeSignUp({
+  // maxBorrowDays: z.enum(rangeBorrowDays.map(String) as [string, ...string[]], {
+  //   message: "Thông tin bắt buộc."
+  // }),
+  maxBorrowDays: z.number().min(1, {message: "Số ngày mượn tối đa phải ít nhất là 1"}),
+  // lateFeePerDay: z.enum(rangeLateFeePerDay.map(String) as [string, ...string[]], {
+  //   message: "Thông tin bắt buộc."
+  // })
+  lateFreePerDay: z.number().min(1, {message: "Số tiền phạt trễ ít nhất là 1 nghìn đồng"}),
+})
+
+export const InfoLibrarySchema = z.object({
+    name: z.string(),
+    address: z.string(),
+    description: z.string(),
+    maxBorrowDays: z.number(),
+    lateFeePerDay: z.number(),
+    username: z.string(),
 });

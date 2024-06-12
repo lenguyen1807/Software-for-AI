@@ -1,7 +1,6 @@
 export default function Page() {
     return (
-        <>
-        Hello
-        </>
-    )
+        <main>
+        </main>
+    );
 }

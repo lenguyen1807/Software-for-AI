@@ -4,6 +4,8 @@ import NavBar from "@/components/user/nav-bar"
 import UserAvatar from "@/components/user/avatar";
 import { auth } from "@/lib/auth";
 import { User } from "@/lib/interface";
+import SiteFooter from "@/components/footer";
+import { redirect } from "next/navigation";
 
 export default async function UserLayout({
   children,
@@ -11,7 +13,18 @@ export default async function UserLayout({
   children: React.ReactNode;
 }>) {
 
-  const data = (await auth())?.user as User;
+  const user = (await auth())?.user;
+
+  if (user) {
+      if (user.role != "user") {
+          redirect("/");
+      }
+  } else {
+      redirect("/login");
+  }
+
+
+  const data = user as User;
 
   return (
     <>
@@ -38,6 +51,7 @@ export default async function UserLayout({
           </div>
         </div>
       </main>
+      <SiteFooter/>
     </>
   );
 }
