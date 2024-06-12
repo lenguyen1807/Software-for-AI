@@ -1,7 +1,6 @@
 import { Book, GetBookProps, Library } from "@/lib/interface";
 import { ResolveURL } from "@/lib/utils";
 import axios from 'axios';
-import { auth } from "./auth";
 
 export async function GetBooks() {
     const res = await axios.get(ResolveURL("books"));
