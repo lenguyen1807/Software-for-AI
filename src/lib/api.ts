@@ -1,6 +1,7 @@
 import { Book, GetBookProps, Library } from "@/lib/interface";
 import { ResolveURL } from "@/lib/utils";
 import axios from 'axios';
+import { auth } from "./auth";
 
 export async function GetBooks() {
     const res = await axios.get(ResolveURL("books"));
@@ -31,27 +32,7 @@ export async function GetLibraryBook({ID, page} : {ID: string, page: number}) {
     return res.data as Book[];
 }
 
-export async function GetLoginToken({...props} : {username: string, password: string}) {
+export async function GetLoginData({...props} : {username: string, password: string}) {
     const res = await axios.post(ResolveURL(`login`), null, { params: props});
-    return res.data.access_token;
-}
-
-export async function GetUserLibrary() {
-    const res = await axios.get(ResolveURL("user/libraries"), {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxMDA0MzMuNzcwNjkzMywiaWQiOiI2MGQ5ZjRmMWUxYTNlNTZhM2MzZjNiM2YiLCJyb2xlIjoidXNlciJ9.xJqDaUTyGsXlt6rqREvr8wq0-PLrRrp40jWXzYDveOo`
-                        }
-                    });
-    return res.data as Library[];
-}
-
-export async function GetUserBorrows() {
-    const res = await axios.get(ResolveURL("user/borrows"), {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxMDA0MzMuNzcwNjkzMywiaWQiOiI2MGQ5ZjRmMWUxYTNlNTZhM2MzZjNiM2YiLCJyb2xlIjoidXNlciJ9.xJqDaUTyGsXlt6rqREvr8wq0-PLrRrp40jWXzYDveOo`
-                        }
-                    });
-    return res.data as Book[];
+    return res.data;
 }

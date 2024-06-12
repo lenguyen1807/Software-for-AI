@@ -35,7 +35,7 @@ import { Calendar } from "@/components/ui/calendar-extended";
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/components/ui/use-toast";
-import { SignUpSchema as FormSchema } from "@/lib/zod"
+import { UserSignUpSchema as FormSchema } from "@/lib/zod"
 import { useState } from "react";
 import { ToastAction } from "../ui/toast";
 
@@ -55,9 +55,9 @@ export default function SignupForm() {
         day: "2-digit",
         year: "numeric"
       }).split("/").reverse().join("-"),
-      address: _data.address
-    })
-      .then((response) => {
+      address: _data.address,
+      role: "user"
+    }).then((response) => {
         setOpen(false);
         if (response.status === 200) {
           toast({
@@ -66,8 +66,7 @@ export default function SignupForm() {
             action: <ToastAction altText="ok">Đăng nhập thôi</ToastAction>
           })
         } 
-      })
-      .catch((error) => {
+      }).catch((error) => {
         setOpen(false);
         switch(error.response.status) {
           case 500:
