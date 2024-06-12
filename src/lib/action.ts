@@ -6,6 +6,7 @@ import { z } from "zod";
 import { LoginSchema } from "@/lib/zod";
 import axios from "axios";
 import { ResolveURL } from "./utils";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function Authenciate(data: z.infer<typeof LoginSchema>) {
     try {
@@ -41,4 +42,14 @@ export async function DeleteUser(ID: string, token: string) {
             "Authorization": `Bearer ${token}`
         }
     });
+    revalidatePath("/admin/accounts");
+}
+
+export async function DeleteBook(ID: string, token: string) {
+    await axios.delete(ResolveURL(`books/${ID}`), {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    revalidatePath("/admin/books");
 }
