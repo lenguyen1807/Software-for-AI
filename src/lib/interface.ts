@@ -30,6 +30,7 @@ export interface Book {
     currentNum:  number;
     numOfRating: number;
     avgRating:   number;
+    libraryName: string;
 }
 
 export interface Library {
