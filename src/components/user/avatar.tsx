@@ -20,16 +20,11 @@ import {
   Stamp
 } from "lucide-react";
 import Link from "next/link";
-import { signOut } from '@/lib/auth';
+import { SignOut } from "@/lib/action";
 import { Button } from "../ui/button";
 import Image from "next/image";
 
 export default function UserAvatar({user} : {user: User}) {
-  async function SignOut() {
-    "use server" 
-    await signOut({ redirectTo: "/" });
-  }  
-
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -37,10 +32,9 @@ export default function UserAvatar({user} : {user: User}) {
                 <AvatarImage 
                   src={user.avatarURL}
                   alt={user.username}
-                  asChild
-                >
-                  <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
-                </AvatarImage>
+                />
+                  {/* <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
+                </AvatarImage> */}
                 <AvatarFallback>User</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
