@@ -16,11 +16,11 @@ export default async function UserLayout({
   const user = (await auth())?.user;
 
   if (user) {
-      if (user.role != "user") {
-          redirect("/");
-      }
+    if (user.role != "user") {
+      redirect("/");
+    }
   } else {
-      redirect("/login");
+    redirect("/login");
   }
 
 
@@ -28,30 +28,25 @@ export default async function UserLayout({
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 max-w-screen-2xl items-center">
-            <NavBar />
-            <div className="flex flex-1 items-center justify-between space-x-7 md:justify-end">
-                <HelpModal />
-                <div className="w-full flex-1 md:w-auto md:flex-none">
-                    <SearchBox/>
-                </div>
-                <nav className="flex items-center">
-                    <UserAvatar user={data} />
-                </nav>
+      <header>
+        <div className="fixed z-50 w-full bg-white border-b container flex h-14 max-w-screen-2xl items-center">
+          <NavBar />
+          <div className="flex flex-1 items-center justify-between space-x-7 md:justify-end">
+            <HelpModal />
+            <div className="w-full flex-1 md:w-auto md:flex-none">
+              <SearchBox />
             </div>
-        </div>
-      </header>
-      <main className="border-t">
-        <div className="lg:border-l w-screen">
-          <div className="h-full px-4 py-6 lg:px-8">
-            <div className="border-md p-0 outline-none">
-                {children}
-            </div>
+            <nav className="flex items-center">
+              <UserAvatar user={data} />
+            </nav>
           </div>
         </div>
+      </header>
+
+      <main className="pt-14 w-screen bg-light-blue lg:border-l">
+        {children}
       </main>
-      <SiteFooter/>
+      <SiteFooter />
     </>
   );
 }
