@@ -17,24 +17,21 @@ import {
   CircleUser,
   LibraryBig,
   LogOut,
-  Stamp
+  History
 } from "lucide-react";
 import Link from "next/link";
 import { SignOut } from "@/lib/action";
 import { Button } from "../ui/button";
-import Image from "next/image";
 
 export default function UserAvatar({user} : {user: User}) {
   return (
     <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Avatar>
+        <Avatar className="ring-1 ring-slate-200">
                 <AvatarImage 
-                  src={user.avatarURL}
+                  src={user.avatarUrl}
                   alt={user.username}
                 />
-                  {/* <Image src={user.avatarURL} alt={user.username} width={40} height={40} />
-                </AvatarImage> */}
                 <AvatarFallback>User</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
@@ -53,7 +50,7 @@ export default function UserAvatar({user} : {user: User}) {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
-                  href="#" 
+                  href="/user/profile/member" 
                   className="flex"
                 >
                   <LibraryBig className="mr-2 h-5 w-5"/>
@@ -62,11 +59,11 @@ export default function UserAvatar({user} : {user: User}) {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link
-                  href="#" 
+                  href="/user/profile/borrow-history" 
                   className="flex"
                 >
-                  <Stamp className="mr-2 h-5 w-5"/>
-                  <span>Yêu cầu duyệt</span>
+                  <History className="mr-2 h-5 w-5"/>
+                  <span>Lịch sử mượn</span>
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

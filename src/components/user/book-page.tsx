@@ -23,7 +23,7 @@ export default function BookPage({...props} : GetBookProps) {
             setBook(data);
             window.scrollTo(0, 0);
         })
-    }, [page]);
+    }, [page, props.language, props.author, props.series, props.genres, props.publisher]);
 
     return (
         <>

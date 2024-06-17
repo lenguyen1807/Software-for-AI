@@ -29,7 +29,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input";
-import { ResolveURL } from "@/lib/utils";
+import { ResolveURL, ToDateFormat } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar-extended";
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -50,11 +50,7 @@ export default function SignupForm() {
       name: _data.name,
       password: _data.password,
       email: _data.email,
-      dateOfBirth: _data.birthday.toLocaleDateString("vi-VN", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "numeric"
-      }).split("/").reverse().join("-"),
+      dateOfBirth: ToDateFormat(_data.birthday),
       address: _data.address,
       role: "user"
     }).then((response) => {

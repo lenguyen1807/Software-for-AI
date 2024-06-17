@@ -1,5 +1,4 @@
 import { ZodRawShape, z } from "zod"
-import { rangeBorrowDays, rangeLateFeePerDay } from "@/lib/utils";
 
 export const LoginSchema = z.object({
   username: z
@@ -65,4 +64,29 @@ export const InfoLibrarySchema = z.object({
     maxBorrowDays: z.number(),
     lateFeePerDay: z.number(),
     username: z.string(),
+});
+
+export const InfoUserSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  dateOfBirth: z.string(),
+  address: z.string(),
+})
+
+export const UserPasswordSchema = z.object({
+  password: z
+    .string({ required_error: "Mật khẩu là bắt buộc" }),
+  confirmPassword: z
+    .string({ required_error: "Nhập lại mật khẩu là bắt buộc" }),
+  newPassword: z
+    .string({ required_error: "Mật khẩu mới là bắt buộc" })
+    .min(3, { message: "Mật khẩu phải có ít nhất 8 ký tự" }),
+}).superRefine(({ password, confirmPassword }, ctx) => {
+  if (password != confirmPassword) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Mật khẩu không khớp",
+      path: ["confirmPassword"]
+    })
+  }
 });

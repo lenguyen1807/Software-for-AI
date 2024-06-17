@@ -1,7 +1,7 @@
 export interface User {
     _id: string;
     name: string;
-    avatarURL: string;
+    avatarUrl: string;
     username: string;
     dateOfBirth: string;
     role: string;
@@ -44,15 +44,33 @@ export interface Library {
     lateFeePerDay:  number;
     numOfRating:    number;
     avgRating:      number;
-    managerID: string;
+    managerID:      string;
 }
 
 export interface GetBookProps {
-    limit: number,
-    sort_by?: string | undefined,
-    genres?: string | undefined,
-    publisher?: string | undefined,
-    language?: string | undefined
-    series?: string | undefined,
-    author?: string | undefined
+    limit: number;
+    sort_by?: string | string[] | undefined;
+    genres?: string | string[] | undefined;
+    publisher?: string | string[] | undefined;
+    language?: string | string[] | undefined;
+    series?: string | string[] | undefined;
+    author?: string | string[] | undefined;
+    slug?: string | undefined;
 };
+
+export interface BorrowHistory {
+    _id:        string;
+    borrowDate: string;
+    returnDate: string;
+    bookTitle: string;
+    library: string;
+    status: "Đang mượn" | "Đã trả";
+}
+
+export interface Filter {
+    language: string[];
+    publisher: string[];
+    genres: string[];
+    author: string[];
+    series: string[];
+}

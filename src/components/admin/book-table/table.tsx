@@ -34,7 +34,7 @@ export default function BookAdminTable({data} : {data: Book[]}) {
     const [rowSelection, setRowSelection] = useState({});
 
     const handleDelete = useCallback(DeleteBook, []);
-    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [data]);
+    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
 
     const table = useReactTable({
         data,

@@ -17,8 +17,9 @@ export default function SiteFooter() {
             <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
                  <p className="text-balance text-center text-sm leading-loose text-muted-foreground md:text-left">
                     Trang web này được xây dựng bằng {" "}
-                    <Href href="https://ui.shadcn.com/" desc="shadcn/ui"/> (nhóm tụi mình rất cảm ơn {" "}
-                    <Href href="https://github.com/shadcn-ui/ui/tree/main/apps/www/components" desc="source code của shadcn/ui"/> 😭) và {" "}
+                    <Href href="https://ui.shadcn.com/" desc="shadcn/ui"/> và {" "}
+                    {/* (nhóm tụi mình rất cảm ơn {" "}
+                    <Href href="https://github.com/shadcn-ui/ui/tree/main/apps/www/components" desc="source code của shadcn/ui"/> 😭)  */}
                     <Href href="https://nextjs.org/docs/getting-started/installation" desc="NextJS"/>. Ngoài ra cảm ơn các thành viên của nhóm gồm {" "}
                     <Href href="https://www.facebook.com/vmthu.XII" desc="Vũ Minh Thư"/>, {" "}
                     <Href href="https://www.facebook.com/profile.php?id=100010421776385" desc="Ngô Ngọc Vũ"/>, {" "}

@@ -28,7 +28,9 @@ export default function RootLayout({
         )}
       >
         <main>
-          {children}
+          <div className="relative h-full w-full bg-white">
+            {children}
+          </div>
         </main>
         <Toaster />
       </body>
