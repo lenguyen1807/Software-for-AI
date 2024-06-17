@@ -1,3 +1,4 @@
+import { Option } from "@/components/ui/multiple-selector";
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -10,14 +11,6 @@ export function ResolveURL(path: string) {
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/${path}`
   : `http://127.0.0.1:8000/api/${path}`;
 }
-
-// export function ToDateString(date: string) {
-//   return (new Date(date)).toLocaleDateString("en-US", {
-//       year: "numeric",
-//       month: "2-digit",
-//       day: "2-digit"
-//   });
-// }
 
 export function ToDateID(id: string) {
   const timestamp = id.substring(0, 8);
@@ -48,6 +41,15 @@ export const slugify = (...args: (string | number)[]): string => {
         .replace(/\s+/g, '-') // separator
 }
 
-export const rangeBorrowDays = Array.from({ length: 10 }, (_, i) => (i + 5).toString());
+// export const rangeBorrowDays = Array.from({ length: 10 }, (_, i) => (i + 5).toString());
 
-export const rangeLateFeePerDay = Array.from({ length: 1000 }, (_, i) => ((i + 1) * 1000).toString());
+// export const rangeLateFeePerDay = Array.from({ length: 1000 }, (_, i) => ((i + 1) * 1000).toString());
+
+export function ToDateFormat(date: Date) {
+  return date
+    .toLocaleDateString("vi-VN", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "numeric"
+                    }).split("/").reverse().join("-")
+}

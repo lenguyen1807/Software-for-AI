@@ -4,7 +4,7 @@ export default function UserLayout({
   children: React.ReactNode;
 }>) {
     return (
-        <div className="border-none p-0 outline-none space-y-10">
+        <div className="border-none px-6 pt-4 pb-6 outline-none space-y-10">
             {children}
         </div>
     )

@@ -56,8 +56,8 @@ export default function NavBar() {
             </Link>
             <nav className="flex items-center gap-4 text-sm lg:gap-6">
                 <NavigationMenu>
-                    <NavigationMenuList className="text-muted-foreground transition-all hover:text-primary">
-                        <NavigationMenuItem>
+                    <NavigationMenuList className="text-muted-foreground">
+                        <NavigationMenuItem className="hover:text-primary">
                             <Link
                                 href="/user/explore/all"
                                 legacyBehavior
@@ -67,7 +67,7 @@ export default function NavBar() {
                                     className={cn(
                                         "items-center gap-2 rounded-md px-3 py-2",
                                         {
-                                            "text-primary": pathname === "/user/book/all"
+                                            "text-primary": pathname === "/user/explore/all"
                                         },
                                         navigationMenuTriggerStyle()
                                     )}
@@ -76,20 +76,24 @@ export default function NavBar() {
                                 </NavigationMenuLink>
                             </Link>
                         </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuTrigger>
-                                Khám phá
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <div className="grid w-[400px] gap-3 p-4">
-                                    <ListItem
-                                        href="/user/explore/genre"
-                                        title="Thể loại"
-                                    >
-                                        Tìm xem những cuốn sách theo từng thể loại ở thư viện Bobo
-                                    </ListItem>
-                                </div>
-                            </NavigationMenuContent>
+                        <NavigationMenuItem className="hover:text-primary">
+                            <Link
+                                href="/user/explore"
+                                legacyBehavior
+                                passHref
+                            >
+                                <NavigationMenuLink
+                                    className={cn(
+                                        "items-center gap-2 rounded-md px-3 py-2",
+                                        {
+                                            "text-primary": pathname === "/user/explore"
+                                        },
+                                        navigationMenuTriggerStyle()
+                                    )}
+                                >
+                                    Khám phá
+                                </NavigationMenuLink>
+                            </Link>
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>

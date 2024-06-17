@@ -1,4 +1,4 @@
-import { Book, GetBookProps, Library } from "@/lib/interface";
+import { Book, Filter, GetBookProps, Library } from "@/lib/interface";
 import { ResolveURL } from "@/lib/utils";
 import axios from 'axios';
 
@@ -17,7 +17,12 @@ interface GetBookPropsPage extends GetBookProps {
 }
 
 export async function GetBooksParam({...props} : GetBookPropsPage ) {
-    const res = await axios.get(ResolveURL("books"), { params: props });
+    const res = await axios.get(ResolveURL("books"), { 
+        params: props,
+        paramsSerializer: {
+            indexes: null
+        }
+    });
     return res.data as Book[];
 }
 
@@ -45,11 +50,34 @@ export async function GetUserLibrary(token: string) {
     return res.data as Library[];
 }
 
+export async function GetUserJoinLibrary(token: string) {
+    const res = await axios.get(ResolveURL("user/libraries/request"), {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    return res.data as Library[];
+}
+
 export async function GetUserBorrows(token: string) {
-    const res = await axios.get(ResolveURL("user/borrows"), {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-    return res.data as Book[];
+    const res = await fetch(ResolveURL("user/borrows"), {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        next: {
+            tags: ["user_borrow"]
+        }
+    })
+    const data = await res.json();
+    return data as Book[];
+}
+
+export async function GetFilter() {
+    const res = await fetch(ResolveURL("books/book/filter"), {
+        next: {
+            tags: ["filters"]
+        }
+    });
+    const data = await res.json();
+    return data as Filter;
 }

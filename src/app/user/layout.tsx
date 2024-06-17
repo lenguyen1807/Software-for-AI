@@ -43,7 +43,7 @@ export default async function UserLayout({
         </div>
       </header>
 
-      <main className="pt-14 w-screen bg-light-blue lg:border-l">
+      <main className="pt-14 w-screen lg:border-l">
         {children}
       </main>
       <SiteFooter />

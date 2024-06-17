@@ -1,10 +1,12 @@
-import { GetBookByID, GetLibraryByID } from "@/lib/api";
 import Image from "next/image";
+import Link from "next/link";
+import BorrowForm from "@/components/user/borrow-form";
+
+import { Ratings } from "@/components/ui/ratings";
 import { STIX_Two_Text, Nunito, Playfair_Display } from "next/font/google";
 import { cn } from "@/lib/utils";
-import BorrowForm from "@/components/user/borrow-form";
-import { Ratings } from "@/components/ui/ratings";
-import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { GetBookByID, GetLibraryByID, GetUserLibrary } from "@/lib/api";
 
 const stix = STIX_Two_Text({
   weight: "600",
@@ -63,18 +65,16 @@ function TextField({label, value} : {label: string, value: string}) {
 }
 
 /** Generate Metadata for book page based on book title */
-export async function generateMetadata(
-  { params } : Props
-) {
+export async function generateMetadata( { params } : Props ) {
   const book = await GetBookByID(params.bookID);
   return { title: `Thư viện Bobo | ${book.title}` }
 }
 
-export default async function Page(
-  { params }: Props
-) {
+export default async function Page( { params }: Props ) {
+  const user = (await auth())?.user;
   const book = await GetBookByID(params.bookID);
   const lib = await GetLibraryByID(book.libraryID);
+  const libs = await GetUserLibrary(user.jwt)
 
   return (
     <div className="w-screen mx-auto p-10 space-y-20">
@@ -152,7 +152,14 @@ export default async function Page(
             </div>
           </div>
           <div className="pt-6">
-            <BorrowForm book={book} />
+            <BorrowForm 
+              book={book} 
+              libs={libs}
+              libID={lib._id}
+              libFee={lib.lateFeePerDay}
+              userID={user?.id}
+              token={user.jwt}
+            />
           </div>
         </div>
       </div>
@@ -184,6 +191,10 @@ export default async function Page(
             label="Ngôn ngữ"
             value={book.language}
             href={`/user/explore/language/${book.language}`}
+          />
+          <TextField
+            label="Số lượng hiện tại"
+            value={`${book.currentNum} cuốn`}
           />
         </div>
       </div>

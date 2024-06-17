@@ -22,7 +22,7 @@ export default function LibPage({id} : {id: string}) {
             setBook(data);
             window.scrollTo(0, 0);
         })
-    }, [page]);
+    }, [page, id]);
 
     return (
         <>

@@ -1,5 +1,5 @@
 import BookPage from "@/components/user/book-page";
-import { decode } from "querystring";
+import { slugify } from "@/lib/utils";
 
 type Props = {
     params: { filter: string[] };
@@ -47,6 +47,13 @@ function RenderBookPage({
             <BookPage limit={10} series={name}/>
         )
     }
+
+    if (filter == "search") {
+        const slug = slugify(name);
+        return (
+            <BookPage limit={10} slug={slug} />
+        )
+    }
 }
 
 export default function Page({
@@ -66,6 +73,7 @@ export default function Page({
                             {filter == "language" && `Ngôn ngữ ${name}`}
                             {filter == "series" && `Tuyển tập ${name}`}
                             {filter == "author" && `Tác giả ${name}`}
+                            {filter == "search" && `Kết quả tìm kiếm của ${name}`}
                         </h2>
                     </div>
                 </div>

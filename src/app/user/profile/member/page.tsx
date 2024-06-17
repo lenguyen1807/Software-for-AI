@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button"
 import MemberCard from "@/components/user/member-card"
-import { GetUserLibrary } from "@/lib/api";
+import { GetUserJoinLibrary, GetUserLibrary } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { Plus } from "lucide-react";
 
 export default async function Member() {
     const user = (await auth())?.user;
     const libs = await GetUserLibrary(user.jwt);
+    const joinLibs = await GetUserJoinLibrary(user.jwt);
 
     return (
         <div className="grid gap-6">
@@ -17,7 +18,10 @@ export default async function Member() {
             </div>
             <div className="grid grid-cols-2 gap-6">
                 {libs.map((lib) => (
-                    <MemberCard key={lib._id} lib={lib} />
+                    <MemberCard key={lib._id} lib={lib} status={true} />
+                ))}
+                {joinLibs.map((lib) => (
+                    <MemberCard key={lib._id} lib={lib} status={false} />
                 ))}
             </div>
         </div>

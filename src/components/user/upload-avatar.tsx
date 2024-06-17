@@ -29,7 +29,7 @@ export default function UploadAvatar({ avt }: { avt: User }) {
         <div className="relative" >
             <Avatar className="h-40 w-40 ring-1 ring-slate-200 ring-offset-4">
                 <AvatarImage
-                    src={avt?.avatarURL}
+                    src={avt?.avatarUrl}
                     alt={avt?.username}
                     className="h-full w-full object-cover"
                 />

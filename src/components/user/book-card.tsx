@@ -1,6 +1,7 @@
 import type { Book } from "@/lib/interface";
 import BookImage from "./book-image";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     book: Book,
@@ -32,13 +33,26 @@ export default function BookCard({
                 <h3 className="text-base font-[650] text-pretty text-center line-clamp-2 w-full">
                     {book.title}
                 </h3>
-                <div className="text-[13px] space-y-1">
-                    <div className="font-semibold text-muted-foreground text-pretty text-center">
+                <div className="text-[13px]">
+                    <div className="font-semibold text-muted-foreground text-pretty text-center space-y-2">
                         <ul className="space-y-1">
                             {book.author.map((author) => (
-                                <li key={author}>{author}</li>
+                                <li key={author}>
+                                    <Link 
+                                        className="hover:text-primary"
+                                        href={`/user/explore/author/${author}`}
+                                    >
+                                    {author}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
+                        <Link 
+                            className="hover:text-primary"
+                            href={`/user/explore/library/${book.libraryID}`}
+                        >
+                            {book.libraryName}
+                        </Link>
                     </div>
                 </div>
             </figcaption>
