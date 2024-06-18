@@ -58,13 +58,22 @@ export interface GetBookProps {
     slug?: string | undefined;
 };
 
-export interface BorrowHistory {
-    _id:        string;
+export interface IBorrowColumns {
     borrowDate: string;
     returnDate: string;
     bookTitle: string;
     library: string;
-    status: "Đang mượn" | "Đã trả";
+    status: "not returned" | "dated" | "returned";
+}
+
+export interface BorrowHistory {
+    _id: string;
+    bookID: string;
+    libraryID: string;
+    userID: string;
+    borrowDate: string;
+    returnDate: string;
+    status: string;
 }
 
 export interface Filter {
