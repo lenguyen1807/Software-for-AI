@@ -1,9 +1,10 @@
 "use client"
 
-import { BorrowHistory } from "@/lib/interface";
+import { IBorrowColumns } from "@/lib/interface";
 import { ColumnDef } from "@tanstack/react-table"
+import { Badge } from "@/components/ui/badge";
 
-export const columns: ColumnDef<BorrowHistory>[] = [
+export const columns: ColumnDef<IBorrowColumns>[] = [
     {
         accessorKey: "borrowDate",
         header: "Ngày mượn",
@@ -25,5 +26,15 @@ export const columns: ColumnDef<BorrowHistory>[] = [
     {
         accessorKey: "status",
         header: "Trạng thái",
+        cell: ({row}) => {
+            const status = row.getValue("status");
+            if (status === "not returned") {
+                return <Badge variant="green-subtle">Đang mượn</Badge>;
+            }
+            if (status === "dated") {
+                return <Badge variant="red-subtle">Quá hạn</Badge>;
+            }
+            return <Badge variant="blue-subtle">Đã trả</Badge>;
+        }
     },
 ]

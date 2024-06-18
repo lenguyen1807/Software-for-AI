@@ -1,4 +1,4 @@
-import { Book, Filter, GetBookProps, Library } from "@/lib/interface";
+import { Book, IBorrowColumns, Filter, GetBookProps, Library, BorrowHistory } from "@/lib/interface";
 import { ResolveURL } from "@/lib/utils";
 import axios from 'axios';
 
@@ -69,7 +69,7 @@ export async function GetUserBorrows(token: string) {
         }
     })
     const data = await res.json();
-    return data as Book[];
+    return data as BorrowHistory[];
 }
 
 export async function GetFilter() {
