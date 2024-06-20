@@ -27,7 +27,7 @@ export default function HorizontalBookCard({
                 className={classNameImage}
             />
             <div
-                className="pt-2 space-y-2 text-wrap"
+                className="flex flex-wrap pt-2 space-y-2 text-wrap"
                 style={{ width: "w-full" }}
             >
                 <h3 className="text-base font-[650] w-full line-clamp-3">

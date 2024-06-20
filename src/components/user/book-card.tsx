@@ -5,15 +5,11 @@ import Link from "next/link";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     book: Book,
-    width: string,
-    height: string,
     classNameImage: string,
 }
 
 export default function BookCard({
     book,
-    width,
-    height,
     classNameImage,
     className
 }: Props) {
@@ -23,13 +19,9 @@ export default function BookCard({
             className={cn("space-y-3", className)}>
             <BookImage
                 book={book}
-                style={{ width: width, height: height }}
                 className={classNameImage}
             />
-            <figcaption
-                className="pt-2 space-y-2 text-wrap"
-                style={{ width: width }}
-            >
+            <figcaption className="pt-2 space-y-2 text-wrap">
                 <h3 className="text-base font-[650] text-pretty text-center line-clamp-2 w-full">
                     {book.title}
                 </h3>
@@ -38,16 +30,16 @@ export default function BookCard({
                         <ul className="space-y-1">
                             {book.author.map((author) => (
                                 <li key={author}>
-                                    <Link 
+                                    <Link
                                         className="hover:text-primary"
                                         href={`/user/explore/author/${author}`}
                                     >
-                                    {author}
+                                        {author}
                                     </Link>
                                 </li>
                             ))}
                         </ul>
-                        <Link 
+                        <Link
                             className="hover:text-primary"
                             href={`/user/explore/library/${book.libraryID}`}
                         >

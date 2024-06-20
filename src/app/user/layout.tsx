@@ -29,7 +29,7 @@ export default async function UserLayout({
   return (
     <>
       <header>
-        <div className="fixed z-50 w-full bg-white border-b container flex h-14 max-w-screen-2xl items-center">
+        <div className="fixed z-50 w-full bg-white shadow-md shadow-slate-200 container flex h-14 max-w-screen-2xl items-center">
           <NavBar />
           <div className="flex flex-1 items-center justify-between space-x-7 md:justify-end">
             <HelpModal />
@@ -43,9 +43,12 @@ export default async function UserLayout({
         </div>
       </header>
 
-      <main className="pt-14 w-screen lg:border-l">
-        {children}
+      <main className="grid grid-cols-11 pt-14 w-screen bg-white/80 lg:border-l">
+        <div className="col-start-2 col-span-9 my-6">
+          {children}
+        </div>
       </main>
+
       <SiteFooter />
     </>
   );

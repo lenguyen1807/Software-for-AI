@@ -1,9 +1,16 @@
 import { GetBooks, GetBooksParam } from "@/lib/api";
 import BookCard from "@/components/user/book-card";
 
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
+
 import HorizontalBookCard from "@/components/user/horizontal-book-card";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import BookCarousel from "@/components/user/book-carousel";
+
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { cn } from "@/lib/utils";
 import { Nunito } from "next/font/google";
@@ -23,52 +30,87 @@ export default async function Page() {
     
     return (
         <div className={cn(nunito.className)}>
-            {/* Recommend  */}
-            <div className="grid grid-cols-11 gap-6 text-dark-blue mt-6">
-                <div className="col-start-2 col-span-9  bg-white border border-slate-200 rounded-lg p-6">
-                    <h2 className="text-2xl font-bold tracking-tight">
-                        Có thể bạn sẽ thích
-                    </h2>
-                    <p className="text-base text-muted-foreground">
-                        Những sách được gợi ý dành riêng cho bạn đọc
-                    </p>                
-                    <div className="flex justify-center">
-                        <BookCarousel books={books.slice(0, 8)} />
+            <div className="grid grid-cols-10 gap-6 w-full text-dark-blue overflow-hidden p-3">
+                <div className="xl:col-span-7 xl:row-span-2 col-span-10 bg-white rounded-2xl p-6 shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                    <Tabs defaultValue="recommend">
+                        <TabsList className="grid w-[300px] bg-transparent grid-cols-2 gap-4">
+                            <TabsTrigger
+                                value="recommend"
+                                className="rounded-full text-dark-blue/50 
+                            data-[state=inactive]:ring-1 data-[state=inactive]:ring-dark-blue/20 
+                            data-[state=inactive]:hover:ring-offset-1 data-[state=inactive]:hover:ring-dark-blue/50 data-[state=inactive]:hover:text-dark-blue/80
+                            data-[state=active]:bg-dark-blue data-[state=active]:text-white"
+                            >
+                                Gợi ý cho bạn
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="newest"
+                                className="rounded-full text-dark-blue/50 
+                            data-[state=inactive]:ring-1 data-[state=inactive]:ring-dark-blue/20 
+                            data-[state=inactive]:hover:ring-offset-1 data-[state=inactive]:hover:ring-dark-blue/50 data-[state=inactive]:hover:text-dark-blue/80
+                            data-[state=active]:bg-dark-blue data-[state=active]:text-white"
+                            >
+                                Sách mới
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="recommend">
+                            <div className="space-y-6 mt-4 ">
+                                <div className="space-y-1">
+                                    <h2 className="text-2xl font-bold tracking-tight">
+                                        Có thể bạn sẽ thích
+                                    </h2>
+                                    <p className="text-[15px] text-muted-foreground">
+                                        Những sách được gợi ý dành riêng cho bạn đọc
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-6 justify-around">
+                                    {books.slice(0, 8).map((book) => (
+                                        <BookCard
+                                            book={book}
+                                            classNameImage="border-none w-[150px] h-[230px] flex-none"
+                                            className="w-[150px] items-center"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="newest">
+                            <div className="space-y-6 mt-4 ">
+                                <div className="space-y-1">
+                                    <h2 className="text-2xl font-bold tracking-tight">
+                                        Sách mới gần đây
+                                    </h2>
+                                    <p className="text-[15px] text-muted-foreground">
+                                        Những sách mới được thêm vào thư viện Bobo
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-6 justify-around">
+                                    {books.slice(0, 8).map((book) => (
+                                        <BookCard
+                                            book={book}
+                                            classNameImage="border-none w-[150px] h-[230px] flex-none"
+                                            className="w-[150px] items-center"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+
+                        </TabsContent>
+                    </Tabs>
+                </div>
+                
+                
+                <div className="xl:col-span-3 col-span-5  bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                    <div className="space-y-1">
+                        <h2 className="text-2xl font-bold tracking-tight">
+                            Được mượn nhiều nhất
+                        </h2>
+                        <p className="text-[15px] text-muted-foreground">
+                            Sách được mượn nhiều nhất tháng vừa qua
+                        </p>
                     </div>
-                </div>
-            </div>
-            
-            <div className="grid grid-cols-11 gap-6 text-dark-blue mt-6 pb-6">
-                <div className="col-start-2 col-span-6 row-span-2 bg-white border border-slate-200 rounded-lg p-6">
-                    <h2 className="text-2xl font-bold tracking-tight">
-                        Sách mới gần đây
-                    </h2>
-                    <p className="text-base text-muted-foreground">
-                        Những sách mới được thêm vào thư viện Bobo
-                    </p>
-                    <div className=" grid grid-cols-4 gap-x-3 gap-y-6 justify-items-center py-6">
-                        {books.slice(0, 10).map((book) => (
-                            <BookCard
-                                book={book}
-                                width="150px"
-                                height="230px"
-                                classNameImage="border-0"
-                                className=""
-                                key={book._id}
-                            />
-                        ))}
-                    </ div>
-                </div>
 
-                <div className="col-span-3 bg-white border border-slate-200 rounded-lg px-6 pt-6">
-                    <h2 className="text-2xl font-bold tracking-tight">
-                        Được mượn nhiều nhất
-                    </h2>
-                    <p className="text-base text-muted-foreground">
-                        Sách được mượn nhiều nhất tháng vừa qua
-                    </p>
-
-                    <ScrollArea className="h-[400px] mt-3">
+                    <ScrollArea className="xl:h-[350px] my-3">
                         {rankedHotBooks.map((book) => (
                             <HorizontalBookCard
                                 book={book}
@@ -81,23 +123,25 @@ export default async function Page() {
                         ))}
                     </ScrollArea>
                 </div>
-
-                <div className="col-span-3 bg-white border border-slate-200 rounded-lg p-6">
-                    <h2 className="text-2xl font-bold tracking-tight">
-                        Lịch hẹn của bạn
-                    </h2>
-                    <p className="text-base text-muted-foreground">
-                        Nhắc nhở lịch hẹn mượn và trả sách
-                    </p>
-
-                    <ScrollArea className="h-[400px] mt-3">
+                
+                <div className="shrink-0 xl:col-span-3 col-span-5 bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                    <div className="space-y-1">
+                        <h2 className="text-2xl font-bold tracking-tight">
+                            Lịch hẹn của bạn
+                        </h2>
+                        <p className="text-[15px] text-muted-foreground">
+                            Nhắc nhở lịch hẹn mượn và trả sách
+                        </p>
+                    </div>
+                    
+                    <ScrollArea className="xl:h-[350px] my-3">
                         {rankedHotBooks.map((book) => (
                             <HorizontalBookCard
                                 book={book}
                                 width={"80px"}
                                 height={"110px"}
                                 key={book._id}
-                                classNameImage="shadow-none"
+                                classNameImage=""
                                 className="flex gap-[30px] p-3"
                             />
                         ))}
