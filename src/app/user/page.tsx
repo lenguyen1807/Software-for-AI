@@ -100,7 +100,7 @@ export default async function Page() {
                 </div>
                 
                 
-                <div className="xl:col-span-3 col-span-5  bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
+                <div className="xl:col-span-3 lg:col-span-5 col-span-10 bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <div className="space-y-1">
                         <h2 className="text-2xl font-bold tracking-tight">
                             Được mượn nhiều nhất
@@ -110,12 +110,12 @@ export default async function Page() {
                         </p>
                     </div>
 
-                    <ScrollArea className="xl:h-[350px] my-3">
+                    <ScrollArea className="xl:h-[340px] my-3">
                         {rankedHotBooks.map((book) => (
                             <HorizontalBookCard
                                 book={book}
-                                width={"80px"}
-                                height={"110px"}
+                                width={"64px"}
+                                height={"88px"}
                                 key={book._id}
                                 classNameImage=""
                                 className="flex gap-[30px] p-3"
@@ -124,7 +124,7 @@ export default async function Page() {
                     </ScrollArea>
                 </div>
                 
-                <div className="shrink-0 xl:col-span-3 col-span-5 bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
+                <div className="shrink-0 xl:col-span-3 lg:col-span-5 col-span-10 bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <div className="space-y-1">
                         <h2 className="text-2xl font-bold tracking-tight">
                             Lịch hẹn của bạn
@@ -134,15 +134,15 @@ export default async function Page() {
                         </p>
                     </div>
                     
-                    <ScrollArea className="xl:h-[350px] my-3">
+                    <ScrollArea className="xl:h-[340px] my-3">
                         {rankedHotBooks.map((book) => (
                             <HorizontalBookCard
                                 book={book}
-                                width={"80px"}
-                                height={"110px"}
+                                width={"64px"}
+                                height={"88px"}
                                 key={book._id}
                                 classNameImage=""
-                                className="flex gap-[30px] p-3"
+                                className="flex gap-[25px] p-3"
                             />
                         ))}
                     </ScrollArea>
