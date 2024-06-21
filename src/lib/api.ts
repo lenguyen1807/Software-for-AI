@@ -31,8 +31,8 @@ export async function GetLibraryByID(ID: string) {
     return res.data as Library;
 }
 
-export async function GetLibraryBook({ID, page} : {ID: string, page: number}) {
-    const res = await axios.get(ResolveURL(`libraries/${ID}/books?page=${page}`));
+export async function GetLibraryBook({ID, page, limit} : {ID: string, page: number, limit: number}) {
+    const res = await axios.get(ResolveURL(`libraries/${ID}/books?page=${page}&limit=${limit}`));
     return res.data as Book[];
 }
 
