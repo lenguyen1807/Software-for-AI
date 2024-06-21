@@ -72,6 +72,7 @@ export default function SignupForm() {
               variant: "destructive",
               action: <ToastAction altText="ok">Đăng ký lại</ToastAction>
             })
+            break;
           default:
             toast({
               title: "Có lỗi gì đó xảy ra rồi",
@@ -79,6 +80,7 @@ export default function SignupForm() {
               variant: "destructive",
               action: <ToastAction altText="again">Đăng ký lại</ToastAction>
             })
+            break;
         }
       })
   }

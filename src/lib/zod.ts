@@ -80,9 +80,9 @@ export const UserPasswordSchema = z.object({
     .string({ required_error: "Nhập lại mật khẩu là bắt buộc" }),
   newPassword: z
     .string({ required_error: "Mật khẩu mới là bắt buộc" })
-    .min(3, { message: "Mật khẩu phải có ít nhất 8 ký tự" }),
-}).superRefine(({ password, confirmPassword }, ctx) => {
-  if (password != confirmPassword) {
+    .min(8, { message: "Mật khẩu phải có ít nhất 8 ký tự" }),
+}).superRefine(({ newPassword, confirmPassword }, ctx) => {
+  if (newPassword != confirmPassword) {
     ctx.addIssue({
       code: "custom",
       message: "Mật khẩu không khớp",

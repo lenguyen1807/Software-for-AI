@@ -190,10 +190,10 @@ export function ChangePassForm({token} : {token: string}) {
                 />
                 <FormField
                     control={form.control}
-                    name="confirmPassword"
+                    name="newPassword"
                     render={({ field }) => (
                     <FormItem className="space-y-2">
-                        <FormLabel>Nhập lại mật khẩu hiện tại</FormLabel>
+                        <FormLabel>Mật khẩu mới</FormLabel>
                         <FormControl>
                             <Input 
                                 type="password"
@@ -206,10 +206,10 @@ export function ChangePassForm({token} : {token: string}) {
                 />
                 <FormField
                     control={form.control}
-                    name="newPassword"
+                    name="confirmPassword"
                     render={({ field }) => (
                     <FormItem className="space-y-2">
-                        <FormLabel>Mật khẩu mới</FormLabel>
+                        <FormLabel>Nhập lại mật khẩu mới</FormLabel>
                         <FormControl>
                             <Input 
                                 type="password"
