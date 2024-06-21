@@ -1,7 +1,7 @@
 export default function Page() {
     return (
-        <div>
-            This is library page
-        </div>
-    )
+        <main>
+        </main>
+    );
 }
+
