@@ -31,7 +31,7 @@ export default async function Page() {
     return (
         <div className={cn(nunito.className)}>
             <div className="grid grid-cols-10 gap-6 w-full text-dark-blue overflow-hidden p-3">
-                <div className="xl:col-span-7 xl:row-span-2 col-span-10 bg-white rounded-2xl p-6 shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                <div className="xl:col-span-7 xl:row-span-2 col-span-10 bg-white rounded-2xl p-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <Tabs defaultValue="recommend">
                         <TabsList className="grid w-[300px] bg-transparent grid-cols-2 gap-4">
                             <TabsTrigger
@@ -100,7 +100,7 @@ export default async function Page() {
                 </div>
                 
                 
-                <div className="xl:col-span-3 col-span-5  bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                <div className="xl:col-span-3 col-span-5  bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <div className="space-y-1">
                         <h2 className="text-2xl font-bold tracking-tight">
                             Được mượn nhiều nhất
@@ -124,7 +124,7 @@ export default async function Page() {
                     </ScrollArea>
                 </div>
                 
-                <div className="shrink-0 xl:col-span-3 col-span-5 bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                <div className="shrink-0 xl:col-span-3 col-span-5 bg-white rounded-2xl px-6 py-6 shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <div className="space-y-1">
                         <h2 className="text-2xl font-bold tracking-tight">
                             Lịch hẹn của bạn

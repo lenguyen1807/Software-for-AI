@@ -57,7 +57,7 @@ export function InfoForm({user, token} : {user: User, token: string}) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
                 <div className="grid grid-cols-5 grid-flow-col gap-6">
                     <FormField
                         control={form.control}

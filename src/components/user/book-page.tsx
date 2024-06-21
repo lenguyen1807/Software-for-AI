@@ -13,6 +13,12 @@ import {
     PaginationPrevious,
     PaginationLink
 } from "@/components/ui/pagination-extend"
+import { cn } from "@/lib/utils";
+import { Nunito } from "next/font/google";
+
+const nunito = Nunito({
+    subsets: ["latin"],
+});
 
 export default function BookPage({ ...props }: GetBookProps) {
     const [page, setPage] = useState<number>(1);
@@ -27,7 +33,7 @@ export default function BookPage({ ...props }: GetBookProps) {
 
     return (
         <>
-            <div className="flex flex-wrap gap-x-10 justify-around">
+            <div className={cn(nunito.className, "flex flex-wrap gap-x-10 justify-around")}>
                 {books.map((book) => (
                     <BookCard
                         book={book}

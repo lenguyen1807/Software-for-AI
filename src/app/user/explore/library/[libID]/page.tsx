@@ -1,27 +1,34 @@
 import LibPage from "@/components/user/lib-page";
 import { GetLibraryByID } from "@/lib/api";
 
+import { cn } from "@/lib/utils";
+import { Nunito } from "next/font/google";
+
+const nunito = Nunito({
+    subsets: ["latin"],
+});
+
 type Props = {
     params: { libID: string };
 }
 
 export async function generateMetadata({
     params
-} : Props) {
+}: Props) {
     const lib = await GetLibraryByID(params.libID);
-    return { title: `Library | ${lib.name}`};
+    return { title: `Library | ${lib.name}` };
 }
 
 export default async function Page({
     params
-} : Props) {
+}: Props) {
     const lib = await GetLibraryByID(params.libID);
     return (
         <>
-            <div className="flex justify-between">
+            <div className={cn(nunito.className, "flex justify-between")}>
                 <div className="space-y-4">
                     <div className="mt-6 space-y-1">
-                        <h2 className="text-2xl font-semibold tracking-tight">
+                        <h2 className="text-2xl font-bold tracking-tight">
                             Thư viện {lib.name}
                         </h2>
                         <p className="text-sm text-muted-foreground">
@@ -30,7 +37,7 @@ export default async function Page({
                     </div>
                 </div>
             </div>
-            <LibPage id={lib._id}/>
+            <LibPage id={lib._id} limit={12} />
         </>
-    ) 
+    )
 }

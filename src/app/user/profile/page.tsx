@@ -17,7 +17,7 @@ export default async function Home() {
     return (
         <main>
             <div className="grid gap-6">
-                <Card className="border-none shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                <Card className="border-none rounded-2xl shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <CardHeader>
                         <CardTitle>Thông tin cơ bản</CardTitle>
                         <CardDescription>
@@ -53,7 +53,7 @@ export default async function Home() {
                     </CardFooter> */}
                     </CardContent>
                 </Card>
-                <Card className="border-none shadow-[rgba(50,50,93,0.15)_0px_0px_12px_-2px,_rgba(0,0,0,0.15)_0px_3px_7px_-3px]">
+                <Card className="border-none rounded-2xl shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
                     <CardHeader>
                         <CardTitle>Đổi mật khẩu</CardTitle>
                     </CardHeader>

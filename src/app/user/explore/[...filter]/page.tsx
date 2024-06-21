@@ -1,5 +1,11 @@
 import BookPage from "@/components/user/book-page";
 import { slugify } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { Nunito } from "next/font/google";
+
+const nunito = Nunito({
+    subsets: ["latin"],
+});
 
 type Props = {
     params: { filter: string[] };
@@ -64,10 +70,10 @@ export default function Page({
 
     return (
         <>
-            <div className="flex justify-between">
+            <div className={cn(nunito.className, "flex justify-between")}>
                 <div className="space-y-4">
                     <div className="mt-6 space-y-1">
-                        <h2 className="text-2xl font-semibold tracking-tight text-wrap">
+                        <h2 className="text-2xl font-bold tracking-tight text-wrap">
                             {filter == "genre" && `Thể loại ${name}`}
                             {filter == "publisher" && `Nhà xuất bản ${name}`}
                             {filter == "language" && `Ngôn ngữ ${name}`}
