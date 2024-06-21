@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth";
 import { GetBookByID, GetLibraryByID, GetUserLibrary } from "@/lib/api";
 import { RatingBar } from "@/components/user/rating-bar";
 import { Separator } from "@/components/ui/separator";
+import { Review } from "@/components/user/review";
 
 const stix = STIX_Two_Text({
   weight: "600",
@@ -76,14 +77,15 @@ export default async function Page({ params }: Props) {
   const book = await GetBookByID(params.bookID);
   const lib = await GetLibraryByID(book.libraryID);
   const libs = await GetUserLibrary(user.jwt)
-
+  // shadow - [-20px_20px_17px_0px_#bcbec2]shadow-[rgba(50,50,93,0.3)_-15px_15px_12px_0px]
+  // shadow - [rgba(50, 50, 93, 0.5)_0px_0px_12px_0px, _rgba(0, 0, 0, 0.5)_0px_3px_7px_0px]
   return (
-    <div className="space-y-6">
+    <div className="space-y-12">
       <div className="-space-y-28">
         <div className='md:grid md:grid-flow-col md:grid-cols-2'>
           <div className="flex items-center justify-center">
             <div
-              className="overflow-hidden flex rounded-r-xl shadow-[-20px_20px_17px_0px_#bcbec2]"
+              className="overflow-hidden flex rounded-r-xl shadow-[-4px_4px_rgba(150,150,150,_0.3),_-8px_8px_rgba(150,150,150,_0.25),_-12px_12px_rgba(150,150,150,_0.2),_-16px_16px_rgba(150,150,150,_0.15),_-20px_20px_rgba(150,150,150,_0.1),_-24px_24px_rgba(150,150,150,_0.05)]"
               style={{ width: "300px", height: "450px" }}
               key={book._id}
             >
@@ -102,12 +104,12 @@ export default async function Page({ params }: Props) {
               <h1 className={cn("text-5xl text-wrap", stix.className)}>
                 {book.title}
               </h1>
-              <div className={cn("flex items-center space-x-20 text-base text-wrap h-fit", nunito.className)}>
-                <div className="grid grid-cols-1 grid-flow-row">
+              <div className={cn("flex items-center gap-x-20 text-base text-wrap h-fit", nunito.className)}>
+                <div className="flex flex-wrap gap-4 items-center">
                   {book.author.map((author) => (
                     <Link
                       key={author}
-                      className="hover:underline underline-offset-8"
+                      className="hover:underline underline-offset-8 cursor-pointer"
                       href={`/user/explore/author/${author}`}
                     >
                       {author}
@@ -128,11 +130,11 @@ export default async function Page({ params }: Props) {
                 <span className={cn("text-lg", nunito.className)}>{book.avgRating}/5</span>
                 {/* <span className="text-sm text-muted-foreground">{book.numOfRating} ratings</span> */}
               </div>
-              <div className="flex flex-wrap items-center">
+              <div className="flex flex-wrap gap-4 items-center">
                 {book.genres.map((genre) => (
                   <Link
                     key={genre}
-                    className="text-muted-foreground hover:text-primary underline-offset-8 underline pt-4 pr-4 cursor-pointer"
+                    className="text-muted-foreground hover:text-primary underline-offset-8 underline cursor-pointer"
                     href={`/user/explore/genre/${genre}`}
                   >
                     {genre}
@@ -142,7 +144,7 @@ export default async function Page({ params }: Props) {
             </div>
           </div>
         </div>
-        <div className="bg-slate-100 border px-12 pb-12 pt-4 rounded-2xl">
+        <div className="bg-white px-12 pb-12 pt-4 rounded-2xl shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
           <div className="md:grid md:grid-cols-2">
             <div className="pt-6 md:col-start-2">
               <BorrowForm
@@ -193,8 +195,46 @@ export default async function Page({ params }: Props) {
             </div>
           </div>
 
+
         </div>
       </div >
+      <div className={cn("space-y-4", nunito.className)}>
+        <span className="text-lg font-bold" >
+          Bạn đọc đánh giá
+        </span>
+        <div className=" bg-white px-12 py-12 rounded-2xl shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
+          <div className="flex md:flex-row flex-col items-center justify-around md:gap-0 gap-10">
+            <div className="shrink-0 flex flex-col space-y-3 items-center">
+              <span className="text-2xl font-bold">{book.avgRating} / 5</span>
+              <Ratings
+                rating={book.avgRating}
+                variant="yellow"
+                className="flex"
+                size={20}
+              />
+              <span className="text-sm text-muted-foreground">({book.numOfRating} đánh giá)</span>
+            </div>
+            <div className="w-[70%]">
+              <RatingBar />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={cn("space-y-4", nunito.className)}>
+        <span className="text-lg font-bold" >
+          Nhận xét
+        </span>
+        <div className="flex flex-col space-y-6">
+          <Review avt={"https://t3.ftcdn.net/jpg/05/04/05/64/360_F_504056468_vzkaB7uUgnA8fyG0uwJc1Qi1DrEd5CY8.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
+
+          <Review avt={"https://cdn.kinocheck.com/i/tbqw8eo6dt.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
+
+          <Review avt={"https://t3.ftcdn.net/jpg/05/04/05/64/360_F_504056468_vzkaB7uUgnA8fyG0uwJc1Qi1DrEd5CY8.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
+
+          <Review avt={"https://t3.ftcdn.net/jpg/05/04/05/64/360_F_504056468_vzkaB7uUgnA8fyG0uwJc1Qi1DrEd5CY8.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
+        </div>
+      </div>
     </div >
   );
 }
