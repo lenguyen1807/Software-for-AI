@@ -83,3 +83,17 @@ export interface Filter {
     author: string[];
     series: string[];
 }
+
+export interface Review {
+    _id: string;
+    bookID: string;
+    userID: string;
+    reviewDate: string;
+    content: string;
+    rating: number
+}
+
+export interface BookReview {
+    review: Review,
+    info: User
+}

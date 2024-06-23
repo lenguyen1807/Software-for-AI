@@ -5,10 +5,11 @@ import { Ratings } from "@/components/ui/ratings";
 import { STIX_Two_Text, Nunito, Playfair_Display } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";
-import { GetBookByID, GetLibraryByID, GetUserLibrary } from "@/lib/api";
+import { GetBookByID, GetBookReviews, GetLibraryByID, GetUserLibrary } from "@/lib/api";
 import { RatingBar } from "@/components/user/rating-bar";
-import { Separator } from "@/components/ui/separator";
 import { Review } from "@/components/user/review";
+import ReviewForm from "@/components/user/review-form";
+import { BookReview } from "@/lib/interface";
 
 const stix = STIX_Two_Text({
   weight: "600",
@@ -77,8 +78,8 @@ export default async function Page({ params }: Props) {
   const book = await GetBookByID(params.bookID);
   const lib = await GetLibraryByID(book.libraryID);
   const libs = await GetUserLibrary(user.jwt)
-  // shadow - [-20px_20px_17px_0px_#bcbec2]shadow-[rgba(50,50,93,0.3)_-15px_15px_12px_0px]
-  // shadow - [rgba(50, 50, 93, 0.5)_0px_0px_12px_0px, _rgba(0, 0, 0, 0.5)_0px_3px_7px_0px]
+  const reviews = await GetBookReviews(params.bookID);
+
   return (
     <div className="space-y-12">
       <div className="-space-y-28">
@@ -98,9 +99,23 @@ export default async function Page({ params }: Props) {
               />
             </div>
           </div>
-
           <div className="pt-6">
             <div className="space-y-5">
+              {book.series != null &&
+                <div className="text-slate-600">
+                  <div className="grid grid-cols-1 grid-flow-row">
+                    {book.series.map((series) => (
+                      <Link
+                        key={series}
+                        href={`/user/explore/series/${series}`}
+                        className={cn(playfair.className, "text-xl hover:text-primary")}
+                      >
+                        {series}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              }
               <h1 className={cn("text-5xl text-wrap", stix.className)}>
                 {book.title}
               </h1>
@@ -121,13 +136,15 @@ export default async function Page({ params }: Props) {
                 </span>
               </div>
               <div className="flex items-center space-x-5">
-                <Ratings
+                {/* <Ratings
                   rating={book.avgRating}
+                  totalStars={5}
                   variant="yellow"
                   className="flex"
                   size={25}
+                  disabled={true}
                 />
-                <span className={cn("text-lg", nunito.className)}>{book.avgRating}/5</span>
+                <span className={cn("text-lg", nunito.className)}>{book.avgRating}/5</span> */}
                 {/* <span className="text-sm text-muted-foreground">{book.numOfRating} ratings</span> */}
               </div>
               <div className="flex flex-wrap gap-4 items-center">
@@ -152,6 +169,7 @@ export default async function Page({ params }: Props) {
                 libs={libs}
                 libID={lib._id}
                 libFee={lib.lateFeePerDay}
+                libDate={lib.maxBorrowDays}
                 userID={user?.id}
                 token={user.jwt}
               />
@@ -194,30 +212,36 @@ export default async function Page({ params }: Props) {
               />
             </div>
           </div>
-
-
         </div>
       </div >
       <div className={cn("space-y-4", nunito.className)}>
         <span className="text-lg font-bold" >
           Bạn đọc đánh giá
         </span>
-        <div className=" bg-white px-12 py-12 rounded-2xl shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
-          <div className="flex md:flex-row flex-col items-center justify-around md:gap-0 gap-10">
-            <div className="shrink-0 flex flex-col space-y-3 items-center">
-              <span className="text-2xl font-bold">{book.avgRating} / 5</span>
-              <Ratings
-                rating={book.avgRating}
-                variant="yellow"
-                className="flex"
-                size={20}
-              />
-              <span className="text-sm text-muted-foreground">({book.numOfRating} đánh giá)</span>
-            </div>
-            <div className="w-[70%]">
-              <RatingBar />
+        <div className="grid grid-cols-2 gap-x-20">
+          <div className=" bg-white px-12 py-12 rounded-2xl shadow-[rgba(50,50,93,0.08)_0px_0px_12px_-2px,_rgba(0,0,0,0.08)_0px_3px_7px_-3px]">
+            <div className="flex md:flex-row flex-col items-center justify-around md:gap-0 gap-10">
+              <div className="shrink-0 flex flex-col space-y-3 items-center">
+                <span className="text-2xl font-bold">{book.avgRating} / 5</span>
+                  <Ratings
+                    rating={book.avgRating}
+                    totalStars={5}
+                    variant="yellow"
+                    className="flex"
+                    size={20}
+                    disabled={true}
+                  />
+                <span className="text-sm text-muted-foreground">({book.numOfRating} đánh giá)</span>
+              </div>
+              {/* <div className="w-[70%]">
+                <RatingBar />
+              </div> */}
             </div>
           </div>
+          <ReviewForm 
+            bookID={book._id} 
+            userID={user?.id} 
+          />
         </div>
       </div>
 
@@ -226,32 +250,18 @@ export default async function Page({ params }: Props) {
           Nhận xét
         </span>
         <div className="flex flex-col space-y-6">
-          <Review avt={"https://t3.ftcdn.net/jpg/05/04/05/64/360_F_504056468_vzkaB7uUgnA8fyG0uwJc1Qi1DrEd5CY8.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
-
-          <Review avt={"https://cdn.kinocheck.com/i/tbqw8eo6dt.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
-
-          <Review avt={"https://t3.ftcdn.net/jpg/05/04/05/64/360_F_504056468_vzkaB7uUgnA8fyG0uwJc1Qi1DrEd5CY8.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
-
-          <Review avt={"https://t3.ftcdn.net/jpg/05/04/05/64/360_F_504056468_vzkaB7uUgnA8fyG0uwJc1Qi1DrEd5CY8.jpg"} name={"Vux Minh Thuw"} content={"A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!A thrilling journey from start to finish. Highly recommended!"} rating={4.5} reviewDate="01-02-2003" />
+          {reviews.reverse().map((review: BookReview) => (
+            <Review
+              avt={review.info.avatarUrl}
+              name={review.info.name}
+              content={review.review.content}
+              rating={review.review.rating}
+              reviewDate={review.review.reviewDate}
+              key={review.review._id}
+            />
+          ))}
         </div>
       </div>
     </div >
   );
 }
-
-{/* {book.series != null &&
-            <div className="text-slate-600">
-              <h1>Tuyển tập</h1>
-              <div className="grid grid-cols-1 grid-flow-row">
-                {book.series.map((series) => (
-                  <Link
-                    key={series}
-                    href={`/user/explore/series/${series}`}
-                    className={cn(playfair.className, "text-2xl hover:text-primary")}
-                  >
-                    {series}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          } */}

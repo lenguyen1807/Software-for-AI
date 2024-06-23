@@ -54,6 +54,9 @@ export async function DeleteBook(ID: string, token: string) {
     revalidatePath("/admin/books");
 }
 
-export async function Revalidate(tag: string) {
-    revalidateTag(tag);
+export async function Revalidate(name: string, tag: boolean) {
+    if (tag)
+        revalidateTag(name);
+    else
+        revalidatePath(name);
 }

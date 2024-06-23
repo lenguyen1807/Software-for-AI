@@ -8,6 +8,7 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
+
 const nunito = Nunito({
     subsets: ["latin"]
 });
@@ -27,7 +28,7 @@ export function Review({ avt, name, rating, reviewDate, content }: Props) {
                 <div className="xl:col-span-1 col-span-5 flex items-center space-x-3">
                     <Avatar className="h-12 w-12 ring-1 ring-slate-200">
                         <AvatarImage src={avt} />
-                        <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
+                        <AvatarFallback>{name.toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col space-y-1">
                         <div className="text-base">{name}</div>
@@ -41,6 +42,7 @@ export function Review({ avt, name, rating, reviewDate, content }: Props) {
                         variant="yellow"
                         className="flex"
                         size={20}
+                        disabled={true}
                     />
                     <div className="text-sm">{content}</div>
                 </div>

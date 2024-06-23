@@ -22,24 +22,89 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { FileUploader } from "@/components/ui/file-uploader"
 import { useState } from "react";
+import { ResolveURL, ToDateFormat } from "@/lib/utils";
+import { UploadImg } from "@/lib/api";
+import { useToast } from "../ui/use-toast";
+import { Library } from "@/lib/interface";
+import { Revalidate } from "@/lib/action";
+import { usePathname } from "next/navigation";
 
 const MemberSchema = z.object({
+    libid: z.string(),
     images: z.array(z.instanceof(File)),
+}).superRefine(({images}, ctx) => {
+    if (images.length === 1) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Phải có đủ 2 ảnh là ảnh mặt trước và mặt sau",
+            path: ["images"]
+        })
+    }
 })
 
-export default function AddMemberForm() {
+export default function AddMemberForm({
+    userID, libs, token
+} : {
+    userID: string | undefined, libs: Library[], token: string
+}) {
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const { toast } = useToast();
+    const pathname = usePathname();
+
     const form = useForm<z.infer<typeof MemberSchema>>({
        resolver: zodResolver(MemberSchema)
     })
 
-    function onSubmit(_data: z.infer<typeof MemberSchema>) {
-        console.log(_data);
+    async function onSubmit(_data: z.infer<typeof MemberSchema>) {
+        try {
+            setLoading(true);
+
+            // get image url
+            const frontURL = (await UploadImg(_data.images[0])).url;
+            const backURL = (await UploadImg(_data.images[1])).url;
+
+            // post join-request data
+            await axios.post(ResolveURL("user/libraries/request"), {
+                userID: userID,
+                libraryID: _data.libid,
+                dateCreated: ToDateFormat(new Date()),
+                frontImageUrl: frontURL,
+                backImageUrl: backURL
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            setLoading(false);
+            Revalidate(pathname, false);
+            setOpen(false);
+            toast({
+                title: "Đã gửi thông tin thêm thẻ thành công"
+            })
+        } catch (error) {
+            setLoading(false);
+            setOpen(false);
+
+            toast({
+                title: "Có lỗi gì đó xảy ra rồi",
+                variant: "destructive",
+            })
+            throw error;
+        }
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button 
                     variant="outline" 
@@ -56,6 +121,32 @@ export default function AddMemberForm() {
                     >
                         <FormField
                             control={form.control}
+                            name="libid"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Thư viện</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Chọn thư viện mà bạn muốn"/>
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {libs.map((library) => (
+                                                <SelectItem 
+                                                    value={library._id}
+                                                    key={library._id}
+                                                >
+                                                    {library.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
                             name="images"
                             render={({ field }) => (
                                 <div className="space-y-6">
@@ -63,14 +154,11 @@ export default function AddMemberForm() {
                                         <FormLabel>Ảnh mặt trước và mặt sau</FormLabel>
                                         <FormControl>
                                             <FileUploader
+                                                disabled={loading}
                                                 value={field.value}
                                                 onValueChange={field.onChange}
                                                 maxFiles={2}
                                                 maxSize={2 * 1024 * 1024}
-                                                // progresses={progresses}
-                                                // pass the onUpload function here for direct upload
-                                                // onUpload={uploadFiles}
-                                                // disabled={isUploading}
                                             />
                                         </FormControl>
                                     </FormItem>

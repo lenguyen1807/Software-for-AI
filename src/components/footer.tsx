@@ -25,7 +25,8 @@ export default function SiteFooter() {
                     <Href href="https://www.facebook.com/profile.php?id=100010421776385" desc="Ngô Ngọc Vũ"/>, {" "}
                     <Href href="https://web.facebook.com/anhtu.nguyen2112003" desc="Nguyễn Anh Tú"/> cho phần front-end và {" "}
                     <Href href="https://web.facebook.com/haiimphuong" desc="Phan Nguyên Phương"/> ,{" "}
-                    <Href href="https://web.facebook.com/profile.php?id=61552012169255" desc="Đỗ Hoàng Long"/> cho phần back-end 💓.
+                    <Href href="https://web.facebook.com/profile.php?id=61552012169255" desc="Đỗ Hoàng Long"/> cho phần back-end 💓 và cuối cùng là mình {" "}
+                    <Href href="https://www.facebook.com/profile.php?id=100081741695746" desc="Lê Nguyễn"/>
                  </p>
             </div>
         </footer>

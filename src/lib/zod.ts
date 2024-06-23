@@ -6,6 +6,14 @@ export const LoginSchema = z.object({
     .min(4, { message: "Tên đăng nhập phải có ít nhất 4 ký tự" }),
   password: z
     .string()
+}).superRefine(({ username }, ctx) => {
+  if (username.includes(" ")) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Tên tài khoản không được có khoảng trắng",
+      path: ["username"]
+    })
+  }
 })
 
 const SignUpSchema = z.object({
@@ -30,12 +38,20 @@ const SignUpSchema = z.object({
 export function MergeSignUp(schema: ZodRawShape) {
   return SignUpSchema
     .extend(schema)
-    .superRefine(({ password, confirmPassword }, ctx) => {
+    .superRefine(({ password, confirmPassword, username }, ctx) => {
       if (password != confirmPassword) {
         ctx.addIssue({
           code: "custom",
           message: "Mật khẩu không khớp",
           path: ["confirmPassword"]
+        })
+      }
+
+      if (username.includes(" ")) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Tên tài khoản không được có khoảng cách",
+          path: ["username"]
         })
       }
     });
@@ -47,13 +63,7 @@ export const UserSignUpSchema = MergeSignUp({
 })
 
 export const LibrarySignUpSchema = MergeSignUp({
-  // maxBorrowDays: z.enum(rangeBorrowDays.map(String) as [string, ...string[]], {
-  //   message: "Thông tin bắt buộc."
-  // }),
   maxBorrowDays: z.number().min(1, {message: "Số ngày mượn tối đa phải ít nhất là 1"}),
-  // lateFeePerDay: z.enum(rangeLateFeePerDay.map(String) as [string, ...string[]], {
-  //   message: "Thông tin bắt buộc."
-  // })
   lateFreePerDay: z.number().min(1, {message: "Số tiền phạt trễ ít nhất là 1 nghìn đồng"}),
 })
 
@@ -64,7 +74,15 @@ export const InfoLibrarySchema = z.object({
     maxBorrowDays: z.number(),
     lateFeePerDay: z.number(),
     username: z.string(),
-});
+}).superRefine(({ username }, ctx) => {
+  if (username.includes(" ")) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Tên tài khoản không được có khoảng cách",
+      path:["username"]
+    })
+  }
+})
 
 export const InfoUserSchema = z.object({
   name: z.string(),

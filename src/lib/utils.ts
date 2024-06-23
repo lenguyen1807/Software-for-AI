@@ -1,4 +1,3 @@
-import { Option } from "@/components/ui/multiple-selector";
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -71,4 +70,21 @@ export function formatBytes(
   return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
     sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
   }`
+}
+
+export function toBase64(file: File) {
+  // ref: https://github.com/shadcn-ui/ui/issues/250
+	return new Promise((resolve, reject) => {
+		const fileReader = new FileReader();
+		
+		fileReader.readAsDataURL(file);
+		
+		fileReader.onload = () => {
+			resolve(fileReader.result);
+		};
+		
+		fileReader.onerror = (error) => {
+			reject(error);
+		};
+	});
 }
