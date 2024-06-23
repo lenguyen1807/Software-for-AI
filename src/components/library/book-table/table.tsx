@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { BookPlus } from "lucide-react";
 
 export default function BookLibTable({data} : {data: Book[]}) {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -57,15 +58,28 @@ export default function BookLibTable({data} : {data: Book[]}) {
 
     return (
         <div className="px-[25px]">
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Nhập tiêu đề để tìm sách"
-                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("title")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+            <div className="flex items-center justify-between py-4">
+                    <Input
+                        placeholder="Nhập tiêu đề để tìm sách"
+                        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("title")?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                
+                <div className="flex items-center">
+                {/* Nút Thêm sách đang copy từ nút trang trước*/}
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                >
+                    <BookPlus className="mr-2" />
+                    Thêm sách
+                </Button>
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>

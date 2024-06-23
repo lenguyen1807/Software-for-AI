@@ -89,7 +89,7 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
 
             )
         },
-        cell: ({ row }) => <div className="text-center">{row.getValue("genres")[0]}</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("genres").join(", ")}</div>,
     },
     {
         accessorKey: "publisher",

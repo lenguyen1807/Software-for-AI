@@ -18,6 +18,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useSession } from "next-auth/react";
+import { isAfter } from "date-fns";
 
 export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) => void}):ColumnDef<BorrowHistory>[] => [
     {
@@ -90,7 +91,20 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
 
             )
         },
-        cell: ({ row }) => <div className="text-center">{row.getValue("status")}</div>,
+        cell: ({ row }) => {
+            const sta = row.getValue("status");
+            const deadline = new Date(row.getValue("returnDate")); // Giả sử cột "deadline" chứa ngày hạn chót
+            const today = new Date();
+
+            // Kiểm tra xem ngày hiện tại có sau ngày hạn chót không
+            const isOverdue = isAfter(today, deadline);
+            
+            return (
+                <div className="text-center">
+                    {isOverdue == true && sta == "returned" ? "Đã hoàn tất": "Trễ hẹn"}
+                </div>
+            );
+        },
     },
     /*{
         accessorKey: "note",
