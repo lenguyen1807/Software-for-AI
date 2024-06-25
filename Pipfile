@@ -13,6 +13,8 @@ motor = "~=3.3.2"
 pydantic-settings = "*"
 pydantic = {extras = ["email"], version = "*"}
 pyjwt = "*"
+python-dotenv = "*"
+prometheus-client = "*"
 
 [dev-packages]
 
