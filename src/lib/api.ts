@@ -137,6 +137,9 @@ export async function GetUserInfo(token: string) {
         headers: {
             "Authorization": `Bearer ${token}`
         },
+        next: {
+            tags: ["user_info"]
+        }
     })
     const data = await res.json();
     return data as User;

@@ -5,7 +5,7 @@ import { Ratings } from "@/components/ui/ratings";
 import { STIX_Two_Text, Nunito, Playfair_Display } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { auth } from "@/lib/auth";
-import { GetBookByID, GetBookReviews, GetLibraryByID, GetUserLibrary } from "@/lib/api";
+import { GetBookByID, GetBookReviews, GetLibraryByID, GetUserInfo, GetUserLibrary } from "@/lib/api";
 import { RatingBar } from "@/components/user/rating-bar";
 import { Review } from "@/components/user/review";
 import ReviewForm from "@/components/user/review-form";
@@ -74,11 +74,12 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function Page({ params }: Props) {
-  const user = (await auth())?.user;
+  const data = (await auth())?.user;
   const book = await GetBookByID(params.bookID);
   const lib = await GetLibraryByID(book.libraryID);
-  const libs = await GetUserLibrary(user.jwt)
+  const libs = await GetUserLibrary(data.jwt)
   const reviews = await GetBookReviews(params.bookID);
+  const user = await GetUserInfo(data.jwt);
 
   return (
     <div className="space-y-12">

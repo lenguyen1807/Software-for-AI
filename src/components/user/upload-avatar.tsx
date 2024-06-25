@@ -12,7 +12,7 @@ import { UploadImg } from "@/lib/api";
 import axios from "axios";
 import { ResolveURL } from "@/lib/utils";
 import { Revalidate } from "@/lib/action";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type AvatarUploadProps = {
 	value?: string;
@@ -24,6 +24,7 @@ export function UploadAvatar({ value, token }: AvatarUploadProps) {
 	const [loading, setLoading] = React.useState(false);
 	const { toast } = useToast();
 	const pathname = usePathname();
+	const router = useRouter();
 
 	async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		if (e.target.files && e.target.files.length > 0) {
@@ -31,15 +32,15 @@ export function UploadAvatar({ value, token }: AvatarUploadProps) {
 			try {
 				setLoading(true);
 				const url = (await UploadImg(file)).url;
-				axios.put(ResolveURL("user/info"), {
+				const response = await axios.put(ResolveURL("user/info"), {
 					avatarUrl: url
 				}, {
 					headers: {
 						"Authorization": `Bearer ${token}`
 					}
 				})
-				setLoading(false);
 				Revalidate(pathname, false);
+				setLoading(false);
 				toast({
 					title: "Thay đổi avatar thành công"
 				})

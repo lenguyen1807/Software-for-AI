@@ -23,7 +23,6 @@ export default async function UserLayout({
     redirect("/login");
   }
 
-
   const user = await GetUserInfo(data.jwt);
 
   return (
@@ -32,7 +31,7 @@ export default async function UserLayout({
         <div className="fixed z-50 w-full bg-white shadow-sm shadow-slate-200 container flex h-14 max-w-screen-2xl items-center">
           <NavBar />
           <div className="flex flex-1 items-center justify-between space-x-7 md:justify-end">
-            <HelpModal />
+            <HelpModal user={user} />
             <div className="w-full flex-1 md:w-auto md:flex-none">
               <SearchBox />
             </div>
