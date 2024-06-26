@@ -19,6 +19,8 @@ pandas = "*"
 langchain-mongodb = "*"
 langchain = "*"
 langchain-huggingface = "*"
+langchain-community = "*"
+prometheus-client = "*"
 
 [dev-packages]
 
