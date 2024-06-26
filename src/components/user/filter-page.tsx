@@ -27,7 +27,7 @@ export default function FilterPage({ data }: { data: Filter }) {
                 <FilterForm data={data} />
             </FilterContext.Provider>
             <BookPage
-                limit={12}
+                limit={122}
                 language={props.language}
                 author={props.author}
                 genres={props.genres}

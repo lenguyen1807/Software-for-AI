@@ -5,7 +5,7 @@ export default function UserLayout({
 }>) {
   return (
     <div className="border-none p-0 outline-none space-y-10">
-      {children}
+        {children}
     </div>
   )
 }

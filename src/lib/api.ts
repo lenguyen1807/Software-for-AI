@@ -155,3 +155,13 @@ export async function GetLibraryInfo(token: string) {
     const data = await res.json();
     return data as Library;
 }
+
+export async function GetBookRecommend(ID: string, num_books: number) {
+    const res = await axios.post(ResolveURL("recommend"), {
+        user_id: ID,
+        num_recommendations: num_books,
+    })
+    return res.data.recommendations.map((value) => {
+        return value.item_id;
+    })
+}

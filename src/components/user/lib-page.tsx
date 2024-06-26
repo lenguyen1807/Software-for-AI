@@ -2,7 +2,7 @@
 
 import BookCard from "@/components/user/book-card"
 import { GetLibraryBook } from "@/lib/api";
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { Book } from "@/lib/interface";
 import {
     Pagination,
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/pagination-extend"
 import { cn } from "@/lib/utils";
 import { Nunito } from "next/font/google";
+import { ExploreBookSekeleton } from "./book-sekeleton";
 
 const nunito = Nunito({
     subsets: ["latin"],
