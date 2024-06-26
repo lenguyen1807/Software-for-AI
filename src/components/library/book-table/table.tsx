@@ -1,10 +1,12 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState  } from "react";
 import { getColumns } from "@/components/library/book-table/columns";
 import { type Book } from "@/lib/interface";
 import { DeleteBook } from "@/lib/action";
-
+import AddBookForm from "@/components/library/add-book-form"
+import EditBookForm from "@/components/library/edit-book-form"
+import { auth } from "@/lib/auth"
 import {
     ColumnFiltersState,
     SortingState,
@@ -56,6 +58,15 @@ export default function BookLibTable({data} : {data: Book[]}) {
         },
     })
 
+//     const [showForm, setShowForm] = useState(false);
+
+//   const handleButtonClick = () => {
+//     setShowForm(!showForm);
+//   };
+
+
+
+
     return (
         <div className="px-[25px]">
             <div className="flex items-center justify-between py-4">
@@ -69,16 +80,7 @@ export default function BookLibTable({data} : {data: Book[]}) {
                     />
                 
                 <div className="flex items-center">
-                {/* Nút Thêm sách đang copy từ nút trang trước*/}
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    <BookPlus className="mr-2" />
-                    Thêm sách
-                </Button>
+                <AddBookForm />
                 </div>
             </div>
             <div className="rounded-md border">

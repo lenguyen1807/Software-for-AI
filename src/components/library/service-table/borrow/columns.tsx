@@ -92,16 +92,10 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
         },
         cell: ({ row }) => {
             const sta = row.getValue("status");
-            const dayget = new Date(row.getValue("borrowDate"));
-            const today = new Date();
-
-            // Kiểm tra xem ngày hiện tại sau ngày lấy sách hay chưa, nếu rồi thì xem là đã hoàn tất hết luôn. 
-            // Ngược lại, sta = dated xem là đã hủy.
-            const getted = isAfter(today, dayget);
 
             return (
                 <div className="text-center">
-                { getted == true && sta !="dated" ? "Đã hoàn tất" : "Đã hủy"}
+                { sta == "dated" ? "Đã xác nhận" : "Đã hoàn tất"}
                 </div>
             );
         },

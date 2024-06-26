@@ -1,468 +1,339 @@
-"use client";
+"use client"
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { ResolveURL, cn, slugify } from "@/lib/utils"
-import { format } from "date-fns"
-import { vi } from "date-fns/locale"
-import { createContext, useContext, useState } from "react";
-import type { Dispatch, SetStateAction } from "react";
-import { InfoLibrarySchema } from "@/lib/zod";
-
-import { Step, Stepper, useStepper, type StepItem } from "@/components/ui/stepper";
-import { Button } from "@/components/ui/button";
+import { z } from "zod";
+import { format, sub } from "date-fns";
+import axios from 'axios';
+import { Calendar } from "@/components/ui/calendar-extended";
+import { BookPlus, Calendar as CalendarIcon } from "lucide-react"
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+  DialogDescription,
+  DialogTitle
 } from "@/components/ui/dialog"
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar-extended";
-import { Calendar as CalendarIcon } from "lucide-react"
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import { UserSignUpSchema } from "@/lib/zod";
-import { Textarea } from "@/components/ui/textarea";
-import axios, { AxiosError } from "axios";
-import { User } from "@/lib/interface";
+import { useState } from "react";
+import { vi } from "date-fns/locale";
+import { ResolveURL, ToDateFormat, cn, slugify } from "@/lib/utils";
 
-const steps = [
-    { label: "Đăng ký", description: "Đăng ký tài khoản quản lý thư viện" },
-    { label: "Nhập thông tin", description: "Nhập thông tin thư viện" }
-] satisfies StepItem[];
+const AddBookSchema = z.object({
+  title: z.string(),
+  author: z.string(),
+  genre: z.string(),
+  descript: z.string(),
+  publisher: z.string(),
+  publishDate: z.date(),
+  numPages: z.number().min(1, "Số lượng phải lớn hơn 0"), 
+  quantity: z.number().min(1, "Số lượng phải lớn hơn 0"), 
+  lang: z.string(),
+  LibID: z.string(),
+  Libname: z.string(),
+  //coverImage: z.instanceof(File),
+});
 
-interface ISignUpContext {
-    status: boolean;
-    setStatus: Dispatch<SetStateAction<boolean>>;
-}
+export default function AddBookForm() {
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const form = useForm<z.infer<typeof AddBookSchema>>({
+    resolver: zodResolver(AddBookSchema),
+  });
 
-const SignUpContext = createContext<ISignUpContext>({ status: false, setStatus: () => { } });
+  function onSubmit(_data: z.infer<typeof AddBookSchema>) {
+    console.log(_data);
+    const submitData = {
+      slug: slugify(_data.title),
+      tile: _data.title,
+      publishDate: ToDateFormat(_data.publishDate),
+      author: _data.author.split(", "),
+      genres: _data.genre.split(", "),
+      description: _data.descript,
+      language: _data.lang,
+      numPages: _data.numPages,
+      pulisher: _data.publisher,
+      totalBorrow: 0,
+      totalNum: _data.quantity,
+      currentNum: _data.quantity,
+      numOfRating:0,
+      avgRating:0,
+      libraryID: _data.LibID,
+      libraryName: _data.Libname
+    }
+    axios.post(ResolveURL("books/new"), {
+      _id: "5eb7cf5a86d9755df3a6c593",
+      slug: slugify(_data.title),
+      tile: _data.title,
+      publishDate: ToDateFormat(_data.publishDate),
+      author: _data.author.split(", "),
+      genres: _data.genre.split(", "),
+      description: _data.descript,
+      language: _data.lang,
+      numPages: _data.numPages,
+      pulisher: _data.publisher,
+      series: [],
+      totalBorrow: 0,
+      totalNum: _data.quantity,
+      currentNum: _data.quantity,
+      numOfRating:0,
+      avgRating:0,
+      libraryID: _data.LibID,
+      libraryName: _data.Libname,
 
-export default function RegisterForm({token} : {token: string}) {
-    const [status, setStatus] = useState(false);
+    })
+      .then((response) => {
+        setOpen(false);
+        toast({
+          title: "Thêm sách thành công",
+          description: "Sách mới đã được thêm vào kho.",
+        });
+      })
+      .catch((error) => {
+        setOpen(false);
+        toast({
+          title: "Có lỗi xảy ra",
+          description: "Không thể thêm sách, vui lòng thử lại.",
+          variant: "destructive",
+        });
+      });
+  }
 
-    return (
-        <>
-            <SignUpContext.Provider value={{ status, setStatus }}>
-                <DialogAsk />
-            </SignUpContext.Provider>
-            <div className="flex w-3/4 flex-col gap-4">
-                <Stepper variant="circle-alt" initialStep={0} steps={steps}>
-                    {steps.map((stepProps, index) => {
-                        if (index === 0) {
-                            if (status) {
-                                return (
-                                    <Step key={stepProps.label} {...stepProps}>
-                                        <SignUpForm token={token} />
-                                    </Step>
-                                )
-                            }
-                            return null;
-                        }
-                        return (
-                            <Step key={stepProps.label} {...stepProps}>
-                                <InfoForm token={token} />
-                            </Step>
-                        )
-                    })}
-                </Stepper>
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+        <BookPlus className="mr-2" />
+          Thêm sách
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Thêm sách mới</DialogTitle>
+          <DialogDescription>
+            Thêm sách mới vào kho sách bạn quản lý trên thư viện BoBo.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tiêu đề</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập tiêu đề" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="author"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tác giả</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập tác giả" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="genre"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thể loại</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập thể loại" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="descript"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mô tả</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập mô tả" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-x-10">
+            <FormField
+              control={form.control}
+              name="publisher"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>NXB</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nhập NXB" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+                control={form.control}
+                name="publishDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Ngày xuất bản<span className="text-red-500">*</span></FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP", { locale: vi })
+                            ) : (
+                              <span>Chọn ngày</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          captionLayout="dropdown-buttons"
+                          fromYear={1800}
+                          toYear={2024}
+                          locale={vi}
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1800-01-01")
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
             </div>
-        </>
-    )
-};
-
-function SignUpForm({token} : {token: string}) {
-    const form = useForm<z.infer<typeof UserSignUpSchema>>({ resolver: zodResolver(UserSignUpSchema) });
-    const { toast } = useToast();
-    const { nextStep } = useStepper();
-
-    function onSubmit(_data: z.infer<typeof UserSignUpSchema>) {
-        axios.post(ResolveURL("user"), {
-            username: _data.username,
-            name: _data.name,
-            password: _data.password,
-            email: _data.email,
-            dateOfBirth: _data.birthday.toLocaleDateString("vi-VN", {
-                month: "2-digit",
-                day: "2-digit",
-                year: "numeric"
-            }).split("/").reverse().join("-"),
-            address: _data.address,
-            role: "library"
-        }, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        }).then((response) => {
-            if (response.status === 200) {
-                toast({
-                    title: "Đăng ký thành công",
-                })
-            } 
-            nextStep();
-        }).catch((error) => {
-            switch(error.response.status) {
-                case 500:
-                    toast({
-                    title: "Trùng thông tin",
-                    variant: "destructive",
-                    action: <ToastAction altText="ok">Đăng ký lại</ToastAction>
-                    })
-                default:
-                    toast({
-                    title: "Có lỗi gì đó xảy ra rồi",
-                    variant: "destructive",
-                    action: <ToastAction altText="again">Đăng ký lại</ToastAction>
-                    })
-            }
-            throw error;
-        })
-    }
-
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Tài khoản</FormLabel>
-                            <FormControl>
-                                <Input placeholder="duahaulaplanh" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="grid grid-cols-2 gap-y-6 gap-x-10 grid-rows-3">
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Mật khẩu</FormLabel>
-                                <FormControl>
-                                    <Input type="password" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nhập lại mật khẩu</FormLabel>
-                                <FormControl>
-                                    <Input type="password" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tên của quản lý</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email của quản lý</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="address"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Địa chỉ của quản lý</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="birthday"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-col">
-                                <FormLabel>Ngày sinh của quản lý</FormLabel>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant={"outline"}
-                                                className={cn(
-                                                    "pl-3 text-left font-normal",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                                {field.value ? (
-                                                    format(field.value, "PPP", { locale: vi })
-                                                ) : (
-                                                    <span>Chọn ngày</span>
-                                                )}
-                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            captionLayout="dropdown-buttons"
-                                            fromYear={1990}
-                                            toYear={2024}
-                                            locale={vi}
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            disabled={(date) =>
-                                                date > new Date() || date < new Date("1900-01-01")
-                                            }
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <Button type="submit" variant="gooeyRight">
-                        Đăng ký
-                </Button>
-            </form>
+            
+           <div className="grid grid-cols-3 gap-x-10">
+           
+           <FormField
+              control={form.control}
+              name="numPages"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Số trang sách</FormLabel>
+                  <FormControl>
+                  <Input type="number" placeholder="Nhập số lượng" {...field} onChange={event => field.onChange(+event.target.value)}/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="lang"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ngôn ngữ</FormLabel>
+                  <FormControl>
+                  <Input placeholder="tiếng Việt" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+              <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Số lượng</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="Nhập số lượng" {...field} onChange={event => field.onChange(+event.target.value)}/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+           </div>
+            
+            <FormField
+              control={form.control}
+              name="LibID"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mã thư viện</FormLabel>
+                  <FormControl>
+                  <Input placeholder="Nhập ID của thư viện của bạn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="Libname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tên thư viện</FormLabel>
+                  <FormControl>
+                  <Input placeholder="Nhập tên thư viện của bạn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
+              control={form.control}
+              name="coverImage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ảnh bìa</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Chọn ảnh" type="file" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            /> */}
+            <Button type="submit" className="w-full">
+              Thêm sách
+            </Button>
+          </form>
         </Form>
-    )
-}
-
-function InfoForm({token} : {token: string}) {
-    const form = useForm<z.infer<typeof InfoLibrarySchema>>({ resolver: zodResolver(InfoLibrarySchema) });
-    const [userID, setID] = useState("");
-    const { toast } = useToast();
-    const { nextStep } = useStepper();
-
-    function onSubmit(_data: z.infer<typeof InfoLibrarySchema>) {
-        axios.get(ResolveURL(`user?username=${_data.username}`), {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        }).then((response) => {
-            const user: User = response.data[0];
-
-            if (user.role != "library") {
-                throw "Not an library";
-            }
-
-            axios.post(ResolveURL("libraries/new"), {
-                managerID: user._id,
-                slug: slugify(_data.name),
-                ..._data
-            }, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    toast({
-                        title: "Tạo thư viện thành công",
-                    })
-                } 
-            }).catch((error) => {
-                switch(error.response.status) {
-                    default:
-                        toast({
-                            title: "Có lỗi gì đó xảy ra rồi",
-                            variant: "destructive",
-                        })
-                }
-                throw error;
-            })
-        }).catch((error) => {
-            if (error instanceof(AxiosError)) {
-                throw error;
-            } else {
-                if (error === "Not an library") {
-                    toast({
-                        title: "Tài khoản không hợp lệ",
-                        description: "Tài khoản bạn vừa nhập không phải là một tài khoản có quyền quản lý thư viện",
-                        variant: "destructive"
-                    })
-                }
-            }
-        })
-        nextStep();
-    }
-
-    return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-2 gap-x-10">
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tên thư viện</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Thư viện Bobo" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="address"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Địa chỉ của thư viện</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Thông tin về thư viện</FormLabel>
-                            <FormControl>
-                                <Textarea className="resize-none" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="grid grid-cols-2 gap-x-10">
-                    <FormField
-                        control={form.control}
-                        name="maxBorrowDays"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Số ngày mượn tối đa</FormLabel>
-                                <FormControl>
-                                    <Input 
-                                        type="number" 
-                                        {...field} 
-                                        onChange={event => field.onChange(+event.target.value)}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="lateFeePerDay"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Số tiền phạt khi trả sách trễ (nghìn đồng)</FormLabel>
-                                <FormControl>
-                                    <Input 
-                                        type="number" 
-                                        {...field} 
-                                        onChange={event => field.onChange(+event.target.value)}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Tài khoản người quản lý</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button variant="gooeyLeft" type="submit">
-                    Xác nhận
-                </Button>
-            </form>
-        </Form>
-    )
-}
-
-function DialogAsk() {
-    const { status, setStatus } = useContext(SignUpContext);
-    const [open, setOpen] = useState(true);
-
-    return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Đã có tài khoản quản lý thư viện ?</DialogTitle>
-                    <DialogDescription>
-                        Nếu đã có tài khoản được dùng để làm quản lý của thư viện sắp tạo hãy ấn "Đã có". Còn nếu chưa, hãy ấn "Chưa có" để được tạo tài khoản.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid grid-cols-2 gap-x-10">
-                    <Button
-                        variant="ringHover"
-                        onClick={() => {
-                            setStatus(false);
-                            setOpen(false);
-                        }}
-                    >
-                        Đã có
-                    </Button>
-                    <Button
-                        variant="ringHover"
-                        onClick={() => {
-                            setStatus(true);
-                            setOpen(false);
-                        }}
-                    >
-                        Chưa có
-                    </Button>
-                </div>
-            </DialogContent>
-        </Dialog>
-    )
+      </DialogContent>
+    </Dialog>
+  );
 }
