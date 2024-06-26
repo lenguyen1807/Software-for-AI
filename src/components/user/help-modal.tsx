@@ -138,7 +138,7 @@ export default function HelpModal({user} : {user: User}) {
                                     control={form.control}
                                     name="query"
                                     render={({ field }) => (
-                                        <FormItem>
+                                        <FormItem className="grow">
                                             <FormControl>
                                                 <Textarea
                                                     placeholder="Nhập câu hỏi của bạn vào đây"
