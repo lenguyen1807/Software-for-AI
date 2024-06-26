@@ -9,9 +9,9 @@ import type { Book } from "@/lib/interface";
 //   DropdownMenuTrigger,
 // } from "@/components/ui/dropdown-menu"
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import Link from "next/link";
 import Image from "next/image";
@@ -26,17 +26,17 @@ export default function BookImage({
     book,
     style,
     className
-} : Props) {
+}: Props) {
     return (
         <HoverCard openDelay={100} closeDelay={0}>
             <HoverCardTrigger asChild>
                 <Link
                     href={`/user/book/${book._id}`}
-                    className="overflow-hidden flex rounded-md shadow-[-10px_10px_5px_-5px_rgba(0,0,0,0.3)] hover:scale-105"
+                    className="overflow-hidden flex rounded-md shadow-[-9px_9px_5px_-5px_rgba(0,0,0,0.3)] shadow-slate-400 hover:scale-[102%]"
                     style={style}
                     key={book._id}
                 >
-                     <Image 
+                    <Image
                         src={book.imageUrl}
                         alt={book.title}
                         height={200}
@@ -45,8 +45,8 @@ export default function BookImage({
                     />
                 </Link>
             </HoverCardTrigger>
-            <HoverCardContent 
-                side="right" 
+            <HoverCardContent
+                side="right"
                 className="border-8 w-[26rem]"
             >
                 <HoverContent book={book} />
@@ -56,8 +56,8 @@ export default function BookImage({
 }
 
 // export default function BookImage({
-//     book, 
-//     hrefView, 
+//     book,
+//     hrefView,
 //     hrefBorrow,
 //     style,
 //     className
@@ -65,11 +65,11 @@ export default function BookImage({
 //     return (
 //         <DropdownMenu>
 //             <DropdownMenuTrigger asChild>
-//                 <div 
+//                 <div
 //                     className="overflow-hidden flex rounded-md shadow-[-10px_10px_5px_-5px_rgba(0,0,0,0.3)] hover:scale-105"
 //                     style={style}
 //                     key={book._id}>
-//                     <Image 
+//                     <Image
 //                         src={book.imageUrl}
 //                         alt={book.title}
 //                         height={200}
@@ -82,14 +82,14 @@ export default function BookImage({
 //                 <DropdownMenuGroup className="w-40">
 //                     <DropdownMenuItem>
 //                         <Link href={hrefView} className="flex">
-//                             <BookIcon className="mr-2 h-4 w-4"/> 
+//                             <BookIcon className="mr-2 h-4 w-4"/>
 //                             Xem sách
 //                         </Link>
 //                     </DropdownMenuItem>
 //                     <DropdownMenuSeparator/>
 //                     <DropdownMenuItem>
 //                         <Link href={hrefBorrow} className="flex">
-//                             <BookPlus className="mr-2 h-4 w-4"/> 
+//                             <BookPlus className="mr-2 h-4 w-4"/>
 //                             Mượn sách
 //                         </Link>
 //                     </DropdownMenuItem>

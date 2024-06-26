@@ -1,4 +1,3 @@
-import { Option } from "@/components/ui/multiple-selector";
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -52,4 +51,40 @@ export function ToDateFormat(date: Date) {
                         day: "2-digit",
                         year: "numeric"
                     }).split("/").reverse().join("-")
+}
+
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number
+    sizeType?: "accurate" | "normal"
+  } = {}
+) {
+  // ref: https://github.com/sadmann7/file-uploader/blob/main/src/lib/utils.ts
+  const { decimals = 0, sizeType = "normal" } = opts
+
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"]
+  const accurateSizes = ["Bytes", "KiB", "MiB", "GiB", "TiB"]
+  if (bytes === 0) return "0 Byte"
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
+    sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
+  }`
+}
+
+export function toBase64(file: File) {
+  // ref: https://github.com/shadcn-ui/ui/issues/250
+	return new Promise((resolve, reject) => {
+		const fileReader = new FileReader();
+		
+		fileReader.readAsDataURL(file);
+		
+		fileReader.onload = () => {
+			resolve(fileReader.result);
+		};
+		
+		fileReader.onerror = (error) => {
+			reject(error);
+		};
+	});
 }

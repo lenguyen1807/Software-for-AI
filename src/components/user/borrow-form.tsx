@@ -47,7 +47,6 @@ import { Input } from "@/components/ui/input";
 
 const BorrowSchema = z.object({
     borrowDate: z.date(),
-    returnDate: z.string()
 });
 
 interface BorrowFormProps {
@@ -55,12 +54,13 @@ interface BorrowFormProps {
     libs: Library[],
     libID: string,
     libFee: number,
+    libDate: number,
     userID: string | undefined,
     token: string,
 }
 
 export default function BorrowForm({
-    book, libs, libFee, userID, libID, token
+    book, libs, libFee, libDate, userID, libID, token
 } : BorrowFormProps) {
 
     const checkLibValid = (libName: string) => libs.some(({name}) => name === libName);
@@ -78,7 +78,6 @@ export default function BorrowForm({
             userID: userID,
             libraryID: libID,
             borrowDate: ToDateFormat(_data.borrowDate),
-            returnDate: ToDateFormat(addDays(_data.borrowDate, parseInt(_data.returnDate)))
         }, {
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -86,10 +85,9 @@ export default function BorrowForm({
         }).then((response) => {
             setOpen(false);
             if (response.status === 200) {
-                Revalidate("user_borrow");
+                Revalidate("user_borrow", true);
                 toast({
                     title: "Gửi yêu cầu mượn sách thành công",
-                    description: "Bạn đọc vui lòng chờ thư viện duyệt, sau đó thông tin về trạng thái duyệt sẽ được gửi tới bạn"
                 });
             }
         }).catch((error) => {
@@ -123,7 +121,14 @@ export default function BorrowForm({
                 <span className="text-muted-foreground text-wrap italic">{book.title}</span>
               </DialogTitle>
               <DialogDescription className="text-wrap">
-                Nếu bạn trả sách trễ sẽ phải trả phí <span className="font-bold">{libFee} ngàn đồng</span> cho thư viện {book.libraryName} 
+                <div className="space-y-2">
+                    <p>
+                        Nếu bạn trả sách trễ sẽ phải trả phí <span className="font-bold">{libFee} ngàn đồng</span> cho thư viện {book.libraryName} 
+                    </p>
+                    <p>
+                        Thư viện {book.libraryName} có thời gian mượn tối đa là <span className="font-bold">{libDate} ngày</span> do đó sau khi mượn thì bạn đọc nên trả thư viện trong khoảng thời gian này nhé.
+                    </p>
+                </div>
               </DialogDescription>
             </DialogHeader>
                 <Form {...form}>
@@ -166,27 +171,6 @@ export default function BorrowForm({
                                         />
                                     </PopoverContent>
                                 </Popover>
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="returnDate"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Ngày trả</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Chọn số ngày để trả sách" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="1">Ngày kế tiếp</SelectItem>
-                                            <SelectItem value="3">3 ngày sau</SelectItem>
-                                            <SelectItem value="7">Một tuần sau</SelectItem>
-                                        </SelectContent>
-                                    </Select>
                                 </FormItem>
                             )}
                         />

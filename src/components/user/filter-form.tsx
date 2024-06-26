@@ -7,12 +7,12 @@ import { type Filter } from '@/lib/interface';
 
 import { FilterIcon } from 'lucide-react';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast"
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
@@ -33,9 +33,9 @@ export const FormSchema = z.object({
     language: z.array(optionSchema),
 })
 
-function MapToOption(data : string[]): Option[] {
+function MapToOption(data: string[]): Option[] {
     return data.map((val) => {
-        return {"label": val, "value": val};
+        return { "label": val, "value": val };
     })
 }
 
@@ -43,7 +43,7 @@ function MapOptionToValue(data: Option[]) {
     return data.map((option) => option.value);
 }
 
-export function FilterForm({data} : {data : Filter}) {
+export function FilterForm({ data }: { data: Filter }) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -68,9 +68,9 @@ export function FilterForm({data} : {data : Filter}) {
 
     return (
         <Form {...form}>
-            <form 
+            <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6 items-center px-8" 
+                className="flex gap-x-10 space-y-6 items-center pb-3 px-1"
             >
                 <div className='grid grid-cols-5 grid-flow-row gap-x-10 gap-y-4'>
                     <FormField
@@ -78,19 +78,20 @@ export function FilterForm({data} : {data : Filter}) {
                         name="genres"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Thể loại</FormLabel>
+                                <FormLabel className='font-[650] text-[15px]'>Thể loại</FormLabel>
                                 <FormControl>
                                     <MultipleSelector
                                         {...field}
                                         defaultOptions={MapToOption(data.genres)}
-                                        placeholder="Chọn thể loại mà bạn thích"
+                                        placeholder="Tất cả"
                                         badgeVariant="green-subtle"
                                         hidePlaceholderWhenSelected
                                         emptyIndicator={
                                             <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                                no results found.
+                                                Không tìm thấy sách phù hợp.
                                             </p>
                                         }
+                                        className='bg-white'
                                     />
                                 </FormControl>
                             </FormItem>
@@ -101,14 +102,15 @@ export function FilterForm({data} : {data : Filter}) {
                         name="author"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Tác giả</FormLabel>
+                                <FormLabel className='font-[650] text-[15px]'>Tác giả</FormLabel>
                                 <FormControl>
                                     <MultipleSelector
                                         {...field}
                                         defaultOptions={MapToOption(data.author)}
-                                        placeholder="Chọn tác giả mà bạn thích"
+                                        placeholder="Tất cả"
                                         badgeVariant="pink-subtle"
                                         hidePlaceholderWhenSelected
+                                        className='bg-white'
                                     />
                                 </FormControl>
                             </FormItem>
@@ -119,14 +121,15 @@ export function FilterForm({data} : {data : Filter}) {
                         name="publisher"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nhà xuất bản</FormLabel>
+                                <FormLabel className='font-[650] text-[15px]'>Nhà xuất bản</FormLabel>
                                 <FormControl>
                                     <MultipleSelector
                                         {...field}
                                         defaultOptions={MapToOption(data.publisher)}
-                                        placeholder="Chọn nhà xuất bản mà bạn thích"
+                                        placeholder="Tất cả"
                                         badgeVariant="teal-subtle"
                                         hidePlaceholderWhenSelected
+                                        className='bg-white'
                                     />
                                 </FormControl>
                             </FormItem>
@@ -137,14 +140,15 @@ export function FilterForm({data} : {data : Filter}) {
                         name="series"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Tuyển tập sách</FormLabel>
+                                <FormLabel className='font-[650] text-[15px]'>Tuyển tập sách</FormLabel>
                                 <FormControl>
                                     <MultipleSelector
                                         {...field}
                                         defaultOptions={MapToOption(data.series)}
-                                        placeholder="Chọn tuyển tập sách mà bạn thích"
+                                        placeholder="Tất cả"
                                         badgeVariant="amber-subtle"
                                         hidePlaceholderWhenSelected
+                                        className='bg-white'
                                     />
                                 </FormControl>
                             </FormItem>
@@ -155,25 +159,26 @@ export function FilterForm({data} : {data : Filter}) {
                         name="language"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Ngôn ngữ</FormLabel>
+                                <FormLabel className='font-[650] text-[15px]'>Ngôn ngữ</FormLabel>
                                 <FormControl>
                                     <MultipleSelector
                                         {...field}
                                         defaultOptions={MapToOption(data.language)}
-                                        placeholder="Chọn ngôn ngữ mà bạn thích"
+                                        placeholder="Tất cả"
                                         badgeVariant="blue-subtle"
                                         hidePlaceholderWhenSelected
+                                        className='bg-white'
                                     />
                                 </FormControl>
                             </FormItem>
                         )}
                     />
                 </div>
-                <Button 
+                <Button
                     type='submit'
                     variant="gooeyRight"
                 >
-                    <FilterIcon className="mr-2 w-5 h-5"/>
+                    <FilterIcon className="mr-2 w-5 h-5" />
                     Lọc
                 </Button>
             </form>

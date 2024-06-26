@@ -16,10 +16,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
-import UploadAvatar from "@/components/user/upload-avatar"
+import { UploadAvatar } from "@/components/user/upload-avatar"
 import { Button } from "../ui/button"
 import axios from "axios"
 import { ResolveURL } from "@/lib/utils"
+import { Revalidate } from "@/lib/action"
+import { usePathname } from "next/navigation"
 
 export function InfoForm({user, token} : {user: User, token: string}) {
     const form = useForm<z.infer<typeof InfoUserSchema>>({
@@ -29,6 +31,7 @@ export function InfoForm({user, token} : {user: User, token: string}) {
         }
     });
     const { toast } = useToast();
+    const pathname = usePathname();
 
     function onSubmit(_data: z.infer<typeof InfoUserSchema>) {
         axios.put(ResolveURL("user/info"), {
@@ -43,6 +46,7 @@ export function InfoForm({user, token} : {user: User, token: string}) {
                     title: "Đổi thông tin thành công",
                 })
             } 
+            Revalidate(pathname, false);
         }).catch((error) => {
             switch(error.response.status) {
                 default:
@@ -57,7 +61,7 @@ export function InfoForm({user, token} : {user: User, token: string}) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
                 <div className="grid grid-cols-5 grid-flow-col gap-6">
                     <FormField
                         control={form.control}
@@ -89,7 +93,10 @@ export function InfoForm({user, token} : {user: User, token: string}) {
                         )}
                     />
                     <div className="flex justify-center items-center row-span-2 col-span-2">
-                        <UploadAvatar avt={user} />
+                        <UploadAvatar 
+                            value={user.avatarUrl} 
+                            token={token}
+                        />
                     </div>
                 </div>
                 <FormField
@@ -190,10 +197,10 @@ export function ChangePassForm({token} : {token: string}) {
                 />
                 <FormField
                     control={form.control}
-                    name="confirmPassword"
+                    name="newPassword"
                     render={({ field }) => (
                     <FormItem className="space-y-2">
-                        <FormLabel>Nhập lại mật khẩu hiện tại</FormLabel>
+                        <FormLabel>Mật khẩu mới</FormLabel>
                         <FormControl>
                             <Input 
                                 type="password"
@@ -206,10 +213,10 @@ export function ChangePassForm({token} : {token: string}) {
                 />
                 <FormField
                     control={form.control}
-                    name="newPassword"
+                    name="confirmPassword"
                     render={({ field }) => (
                     <FormItem className="space-y-2">
-                        <FormLabel>Mật khẩu mới</FormLabel>
+                        <FormLabel>Nhập lại mật khẩu mới</FormLabel>
                         <FormControl>
                             <Input 
                                 type="password"

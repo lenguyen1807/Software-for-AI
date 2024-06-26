@@ -1,5 +1,5 @@
 export interface User {
-    _id: string;
+    id: string;
     name: string;
     avatarUrl: string;
     username: string;
@@ -82,4 +82,18 @@ export interface Filter {
     genres: string[];
     author: string[];
     series: string[];
+}
+
+export interface Review {
+    _id: string;
+    bookID: string;
+    userID: string;
+    reviewDate: string;
+    content: string;
+    rating: number
+}
+
+export interface BookReview {
+    review: Review,
+    info: User
 }
