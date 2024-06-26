@@ -36,9 +36,9 @@ export default async function MemberCard({ lib, status }: Props) {
                     {status == true && <Badge variant="green-subtle">Thành viên</Badge>}
                     {status == false && <Badge variant="pink-subtle">Đang duyệt</Badge>}
                 </div>
-                <Button variant="ghost" className="absolute right-2 hover:bg-transparent group">
+                {/* <Button variant="ghost" className="absolute right-2 hover:bg-transparent group">
                     <X size={15} strokeWidth={2} className="group-hover:stroke-red-500 stroke-gray-500" />
-                </Button>
+                </Button> */}
             </div>
         </Card>
     )

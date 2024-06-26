@@ -13,11 +13,11 @@ import Image from "next/image"
 const menuList = [
     {
         item: [
-            {
-                link: "/admin",
-                icon: <Home size={20} strokeWidth={2.5} />,
-                text: "Trang chủ"
-            },
+            // {
+            //     link: "/admin",
+            //     icon: <Home size={20} strokeWidth={2.5} />,
+            //     text: "Trang chủ"
+            // },
             {
                 link: "/admin/create",
                 icon: <UserRoundPlus size={20} strokeWidth={2.5} />,

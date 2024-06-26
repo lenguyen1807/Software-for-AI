@@ -54,7 +54,7 @@ interface ISignUpContext {
 
 const SignUpContext = createContext<ISignUpContext>({ status: false, setStatus: () => { } });
 
-export default function RegisterForm({token} : {token: string}) {
+export default function RegisterForm({ token }: { token: string }) {
     const [status, setStatus] = useState(false);
 
     return (
@@ -87,7 +87,7 @@ export default function RegisterForm({token} : {token: string}) {
     )
 };
 
-function SignUpForm({token} : {token: string}) {
+function SignUpForm({ token }: { token: string }) {
     const form = useForm<z.infer<typeof UserSignUpSchema>>({ resolver: zodResolver(UserSignUpSchema) });
     const { toast } = useToast();
     const { nextStep } = useStepper();
@@ -114,21 +114,21 @@ function SignUpForm({token} : {token: string}) {
                 toast({
                     title: "Đăng ký thành công",
                 })
-            } 
+            }
             nextStep();
         }).catch((error) => {
-            switch(error.response.status) {
+            switch (error.response.status) {
                 case 500:
                     toast({
-                    title: "Trùng thông tin",
-                    variant: "destructive",
-                    action: <ToastAction altText="ok">Đăng ký lại</ToastAction>
+                        title: "Trùng thông tin",
+                        variant: "destructive",
+                        action: <ToastAction altText="ok">Đăng ký lại</ToastAction>
                     })
                 default:
                     toast({
-                    title: "Có lỗi gì đó xảy ra rồi",
-                    variant: "destructive",
-                    action: <ToastAction altText="again">Đăng ký lại</ToastAction>
+                        title: "Có lỗi gì đó xảy ra rồi",
+                        variant: "destructive",
+                        action: <ToastAction altText="again">Đăng ký lại</ToastAction>
                     })
             }
             throw error;
@@ -183,7 +183,7 @@ function SignUpForm({token} : {token: string}) {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Tên của quản lý</FormLabel>
+                                <FormLabel>Họ và tên</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
@@ -196,7 +196,7 @@ function SignUpForm({token} : {token: string}) {
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Email của quản lý</FormLabel>
+                                <FormLabel>Email</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
@@ -209,7 +209,7 @@ function SignUpForm({token} : {token: string}) {
                         name="address"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Địa chỉ của quản lý</FormLabel>
+                                <FormLabel>Địa chỉ liên hệ</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
@@ -222,7 +222,7 @@ function SignUpForm({token} : {token: string}) {
                         name="birthday"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Ngày sinh của quản lý</FormLabel>
+                                <FormLabel>Ngày sinh</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -263,14 +263,14 @@ function SignUpForm({token} : {token: string}) {
                     />
                 </div>
                 <Button type="submit" variant="gooeyRight">
-                        Đăng ký
+                    Đăng ký
                 </Button>
             </form>
         </Form>
     )
 }
 
-function InfoForm({token} : {token: string}) {
+function InfoForm({ token }: { token: string }) {
     const form = useForm<z.infer<typeof InfoLibrarySchema>>({ resolver: zodResolver(InfoLibrarySchema) });
     const [userID, setID] = useState("");
     const { toast } = useToast();
@@ -301,9 +301,10 @@ function InfoForm({token} : {token: string}) {
                     toast({
                         title: "Tạo thư viện thành công",
                     })
-                } 
+                }
+                nextStep();
             }).catch((error) => {
-                switch(error.response.status) {
+                switch (error.response.status) {
                     default:
                         toast({
                             title: "Có lỗi gì đó xảy ra rồi",
@@ -313,7 +314,7 @@ function InfoForm({token} : {token: string}) {
                 throw error;
             })
         }).catch((error) => {
-            if (error instanceof(AxiosError)) {
+            if (error instanceof (AxiosError)) {
                 throw error;
             } else {
                 if (error === "Not an library") {
@@ -325,7 +326,6 @@ function InfoForm({token} : {token: string}) {
                 }
             }
         })
-        nextStep();
     }
 
     return (
@@ -350,7 +350,7 @@ function InfoForm({token} : {token: string}) {
                         name="address"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Địa chỉ của thư viện</FormLabel>
+                                <FormLabel>Địa chỉ thư viện</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
@@ -380,9 +380,9 @@ function InfoForm({token} : {token: string}) {
                             <FormItem>
                                 <FormLabel>Số ngày mượn tối đa</FormLabel>
                                 <FormControl>
-                                    <Input 
-                                        type="number" 
-                                        {...field} 
+                                    <Input
+                                        type="number"
+                                        {...field}
                                         onChange={event => field.onChange(+event.target.value)}
                                     />
                                 </FormControl>
@@ -397,9 +397,9 @@ function InfoForm({token} : {token: string}) {
                             <FormItem>
                                 <FormLabel>Số tiền phạt khi trả sách trễ (nghìn đồng)</FormLabel>
                                 <FormControl>
-                                    <Input 
-                                        type="number" 
-                                        {...field} 
+                                    <Input
+                                        type="number"
+                                        {...field}
                                         onChange={event => field.onChange(+event.target.value)}
                                     />
                                 </FormControl>
@@ -436,10 +436,10 @@ function DialogAsk() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Đã có tài khoản quản lý thư viện ?</DialogTitle>
+                <DialogHeader className="gap-y-2">
+                    <DialogTitle>Đã có tài khoản Quản lý thư viện ?</DialogTitle>
                     <DialogDescription>
-                        Nếu đã có tài khoản được dùng để làm quản lý của thư viện sắp tạo hãy ấn "Đã có". Còn nếu chưa, hãy ấn "Chưa có" để được tạo tài khoản.
+                        Nếu đã có tài khoản để quản lý thư viện sắp tạo, hãy chọn "Đã có".
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-2 gap-x-10">
@@ -459,7 +459,7 @@ function DialogAsk() {
                             setOpen(false);
                         }}
                     >
-                        Chưa có
+                        Tạo tài khoản mới
                     </Button>
                 </div>
             </DialogContent>

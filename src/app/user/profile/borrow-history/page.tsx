@@ -2,7 +2,7 @@ import { DataTable } from "@/components/user/history-table";
 import { GetBookByID, GetLibraryByID, GetUserBorrows } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { columns } from "@/components/user/borrow-column"
-import { Book, BorrowHistory } from "@/lib/interface";
+import { BorrowHistory } from "@/lib/interface";
 
 function GetStatus(item: BorrowHistory) {
     const returnDate = new Date(item.returnDate);

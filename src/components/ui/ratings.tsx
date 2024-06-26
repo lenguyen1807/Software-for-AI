@@ -1,5 +1,9 @@
-import React from "react"
-import { Star } from "lucide-react"
+// ref: https://github.com/shadcn-ui/ui/issues/1107
+
+"use client"
+
+import React, { useState } from "react";
+import { Star } from "lucide-react";
 import { cn } from "@/lib/utils"
 
 const ratingVariants = {
@@ -12,74 +16,123 @@ const ratingVariants = {
     emptyStar: "text-red-200",
   },
   yellow: {
-    star: "text-yellow-400",
-    emptyStar: "text-yellow-400",
+    star: "text-yellow-500",
+    emptyStar: "text-yellow-200",
   },
-}
+};
 
 interface RatingsProps extends React.HTMLAttributes<HTMLDivElement> {
-  rating: number
-  totalStars?: number
-  size?: number
-  fill?: boolean
-  Icon?: React.ReactElement
-  variant?: keyof typeof ratingVariants
+  rating: number;
+  totalStars?: number;
+  size?: number;
+  fill?: boolean;
+  Icon?: React.ReactElement;
+  variant?: keyof typeof ratingVariants;
+  onRatingChange?: (rating: number) => void;
+  disabled?: boolean; // Add disabled prop
 }
 
-const Ratings = ({ ...props }: RatingsProps) => {
-  const {
-    rating,
-    totalStars = 5,
-    size = 20,
-    fill = true,
-    Icon = <Star />,
-    variant = "default",
-  } = props
+export const Ratings = ({
+  rating: initialRating,
+  totalStars = 5,
+  size = 20,
+  fill = true,
+  Icon = <Star />,
+  variant = "default",
+  onRatingChange,
+  disabled = false, // Default to false if disabled prop is not provided
+  ...props
+}: RatingsProps) => {
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [currentRating, setCurrentRating] = useState(initialRating);
+  const [isHovering, setIsHovering] = useState(false);
 
-  const fullStars = Math.floor(rating)
+  const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!disabled) {
+      setIsHovering(true);
+      const starIndex = parseInt(
+        (event.currentTarget as HTMLDivElement).dataset.starIndex || "0"
+      );
+      setHoverRating(starIndex);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setHoverRating(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!disabled) {
+      const starIndex = parseInt(
+        (event.currentTarget as HTMLDivElement).dataset.starIndex || "0"
+      );
+      setCurrentRating(starIndex);
+      setHoverRating(null);
+      if (onRatingChange) {
+        onRatingChange(starIndex);
+      }
+    }
+  };
+
+  const displayRating = disabled ? initialRating : hoverRating ?? currentRating;
+  const fullStars = Math.floor(displayRating);
   const partialStar =
-    rating % 1 > 0 ? (
+    displayRating % 1 > 0 ? (
       <PartialStar
-        fillPercentage={rating % 1}
+        fillPercentage={displayRating % 1}
         size={size}
         className={cn(ratingVariants[variant].star)}
         Icon={Icon}
       />
-    ) : null
+    ) : null;
 
   return (
-    <div className={cn("flex items-center gap-2")} {...props}>
-      {[...Array(fullStars)].map((_, i) =>
-        React.cloneElement(Icon, {
-          key: i,
-          size,
-          className: cn(
-            fill ? "fill-current" : "fill-transparent",
-            ratingVariants[variant].star
-          ),
-        })
-      )}
-      {partialStar}
-      {[...Array(totalStars - fullStars - (partialStar ? 1 : 0))].map((_, i) =>
-        React.cloneElement(Icon, {
-          key: i + fullStars + 1,
-          size,
-          className: cn(ratingVariants[variant].emptyStar),
-        })
-      )}
+    <div
+      className={cn("flex w-fit flex-col gap-2", { 'pointer-events-none': disabled })}
+      onMouseLeave={handleMouseLeave}
+      {...props}
+    >
+      <div className="flex items-center" onMouseEnter={handleMouseEnter}>
+        {[...Array(fullStars)].map((_, i) =>
+          React.cloneElement(Icon, {
+            key: i,
+            size,
+            className: cn(
+              fill ? "fill-current stroke-1" : "fill-transparent",
+              ratingVariants[variant].star
+            ),
+            onClick: handleClick,
+            onMouseEnter: handleMouseEnter,
+            "data-star-index": i + 1,
+          })
+        )}
+        {partialStar}
+        {[
+          ...Array(Math.max(0, totalStars - fullStars - (partialStar ? 1 : 0))),
+        ].map((_, i) =>
+          React.cloneElement(Icon, {
+            key: i + fullStars + 1,
+            size,
+            className: cn("stroke-1", ratingVariants[variant].emptyStar),
+            onClick: handleClick,
+            onMouseEnter: handleMouseEnter,
+            "data-star-index": i + fullStars + 1,
+          })
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 interface PartialStarProps {
-  fillPercentage: number
-  size: number
-  className?: string
-  Icon: React.ReactElement
+  fillPercentage: number;
+  size: number;
+  className?: string;
+  Icon: React.ReactElement;
 }
-const PartialStar = ({ ...props }: PartialStarProps) => {
-  const { fillPercentage, size, className, Icon } = props
 
+const PartialStar = ({ fillPercentage, size, className, Icon }: PartialStarProps) => {
   return (
     <div style={{ position: "relative", display: "inline-block" }}>
       {React.cloneElement(Icon, {
@@ -100,7 +153,5 @@ const PartialStar = ({ ...props }: PartialStarProps) => {
         })}
       </div>
     </div>
-  )
-}
-
-export { Ratings }
+  );
+};

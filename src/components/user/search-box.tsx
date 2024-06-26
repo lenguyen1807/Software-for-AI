@@ -27,7 +27,7 @@ const SearchSchema = z.object({
 
 export default function SearchBox() {
     const form = useForm<z.infer<typeof SearchSchema>>({
-        resolver: zodResolver(SearchSchema)
+        resolver: zodResolver(SearchSchema),
     });
     const [open, setOpen] = useState(false);
     const router = useRouter();

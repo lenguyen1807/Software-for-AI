@@ -12,7 +12,7 @@ interface IFilterContext {
 
 export const FilterContext = createContext<IFilterContext | null>(null);
 
-export default function FilterPage({data} : {data: Filter}) {
+export default function FilterPage({ data }: { data: Filter }) {
     const [props, setProps] = useState<IFilterContext["props"]>({
         language: [],
         publisher: [],
@@ -23,11 +23,11 @@ export default function FilterPage({data} : {data: Filter}) {
 
     return (
         <div className="justify-between space-y-6">
-            <FilterContext.Provider value={{props, setProps}}>
+            <FilterContext.Provider value={{ props, setProps }}>
                 <FilterForm data={data} />
             </FilterContext.Provider>
-            <BookPage 
-                limit={10} 
+            <BookPage
+                limit={122}
                 language={props.language}
                 author={props.author}
                 genres={props.genres}
