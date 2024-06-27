@@ -1,3 +1,3 @@
-[submodule "src/api"]
-	path = src/api
+[submodule "backend"]
+	path = backend
 	url = https://github.com/haiimphuongg/software-for-AI
