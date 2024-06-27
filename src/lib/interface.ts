@@ -73,7 +73,7 @@ export interface BorrowHistory {
     userID: string;
     borrowDate: string;
     returnDate: string;
-    status: string;
+    status: boolean;
 }
 
 export interface Filter {
@@ -96,4 +96,19 @@ export interface Review {
 export interface BookReview {
     review: Review,
     info: User
+}
+
+export interface UserJoin extends User {
+    libCheck: boolean,
+    frontImageUrl?: string,
+    backImageUrl?: string,
+    dateCreated?: string,
+    userID?: string,
+    libraryID?: string
+    _id?: string,
+};
+
+export interface UserBorrow extends BorrowHistory {
+    bookTitle: string,
+    username: string
 }

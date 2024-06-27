@@ -22,7 +22,7 @@ export default async function Layout({
   }
 
   return (
-    <div className={cn(nunito.className, "w-full flex w-screen pl-[250px]")}>
+    <div className={cn(nunito.className, "w-full h-screen pl-[250px]")}>
         <SideBar />
         {children}
     </div>

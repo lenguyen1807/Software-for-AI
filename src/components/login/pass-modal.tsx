@@ -52,7 +52,6 @@ export default function PasswordModal({type} : {type: string}) {
             } 
         }).catch((error) => {
             setOpen(false);
-            console.log(error.response);
             switch(error.response.status) {
                 case 404:
                     toast({

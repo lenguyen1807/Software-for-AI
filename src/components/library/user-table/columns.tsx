@@ -1,5 +1,5 @@
 "use client"
-import { User } from "@/lib/interface";
+import { User, UserJoin } from "@/lib/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ShieldCheck, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -14,27 +14,12 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { useSession } from "next-auth/react";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
-export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) => void}) : ColumnDef<User>[] => [
-    {
-        accessorKey: "_id",
-        header: ({ column }) => {
-            return (
-                <div className="flex justify-center items-center">
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Mã khách hàng
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-
-            )
-        },
-        cell: ({ row }) => <div className="text-center">{row.getValue("_id")}</div>,
-    },
+export const getColumns = ({onApprove} : {onApprove: (id: string, token: string, accept: boolean) => void}) : ColumnDef<UserJoin>[] => [
     {
         accessorKey: "name",
         header: ({ column }) => {
@@ -72,7 +57,7 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
         cell: ({ row }) => <div className="text-center">{row.getValue("username")}</div>,
     },
     {
-        accessorKey: "role",
+        accessorKey: "email",
         header: ({ column }) => {
             return (
                 <div className="flex justify-center items-center">
@@ -80,14 +65,14 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
                         variant="ghost"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        Loại toài khoản
+                        Email
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 </div>
 
             )
         },
-        cell: ({ row }) => <div className="text-center">{row.getValue("role")}</div>,
+        cell: ({ row }) => <div className="text-center">{row.getValue("email")}</div>,
     },
     {
         accessorKey: "address",
@@ -108,7 +93,7 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
         cell: ({ row }) => <div className="text-center">{row.getValue("address")}</div>,
     },
     {
-        accessorKey: "status",
+        accessorKey: "libCheck",
         header: ({ column }) => {
             return (
                 <div className="flex justify-center items-center">
@@ -122,11 +107,16 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
                 </div>
             )
         },
-        cell: ({ row }) => <div className="text-center">{row.getValue("status") == false ? "Chờ phê duyệt" : "Thành viên" }</div>,
+        cell: ({ row }) => 
+        <div className="text-center">
+            {row.getValue("libCheck") == false 
+            ? <Badge variant="blue-subtle">Chờ phê duyệt</Badge> 
+            : <Badge variant="green-subtle">Thành viên</Badge>}
+        </div>,
     },
     {
         id: "actions",
-        enableHiding: false,
+        header: ({ column }) => <span>Xét duyệt</span>,
         cell: ({ row }) => {
             const { data: session, status } = useSession();
             const token = session?.user.jwt;
@@ -134,23 +124,73 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
             return (
                 <AlertDialog>
                     <AlertDialogTrigger>
-                        <Button variant="ghost"><ShieldCheck  size={16} /></Button>
+                        {row.getValue("libCheck") === false && <Button variant="ghost"><ShieldCheck size={16}/></Button>}
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Bạn có chắc chắn muốn xóa sách này?</AlertDialogTitle>
+                            <AlertDialogTitle>Bạn có chắc chắn muốn cho người dùng này trở thành thành viên?</AlertDialogTitle>
                             <AlertDialogDescription>
-                                Hành động này không thể được hoàn tác và sẽ xóa vĩnh viễn dữ liệu của sách khỏi máy chủ của chúng tôi.
+                                Người dùng {row.getValue("name")} sẽ trở thành thành viên của thư viện bạn và có thể mượn sách. Đồng thời bạn không thể tự xoá người dùng này ra khỏi danh sách thành viên.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
+                        <div className="grid grid-cols-2 gap-x-14">
+                            <div className="space-y-6">
+                                <span className="text-sm text-muted-foreground">Ảnh mặt trước</span>
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <Image src={row.getValue("frontImageUrl")}
+                                            width={200} 
+                                            height={200} 
+                                            alt={row.getValue("username")}
+                                            style={{
+                                                width: '100%',
+                                                height: 'auto',
+                                            }}
+                                        />
+                                    </DialogTrigger>
+                                    <DialogContent className="min-w-[600px]">
+                                        <div className="relative h-[calc(100vh-220px)] w-full overflow-clip rounded-md bg-transparent">
+                                            <Image src={row.getValue("frontImageUrl")} fill alt={row.getValue("username")} className="h-full w-full object-contain" />
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                            <div className="space-y-6">
+                                <span className="text-sm text-muted-foreground">Ảnh mặt sau</span>
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <Image src={row.getValue("backImageUrl")}
+                                            width={200} 
+                                            height={200} 
+                                            alt={row.getValue("username")}
+                                            style={{
+                                                width: '100%',
+                                                height: 'auto',
+                                            }}
+                                        />
+                                    </DialogTrigger>
+                                    <DialogContent className="min-w-[600px]">
+                                        <div className="relative h-[calc(100vh-220px)] overflow-clip rounded-md bg-transparent">
+                                            <Image src={row.getValue("backImageUrl")} fill alt={row.getValue("username")} className="h-full w-full object-contain" />
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+                        </div>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Huỷ</AlertDialogCancel>
-                            <AlertDialogAction
+                            <AlertDialogCancel
                                 onClick={
-                                    async() => onDelete(row.getValue("_id"), token)
+                                    async() => onApprove(row.getValue("_id"), token, false)
                                 }
                             >
-                                Tiếp tục
+                                Từ chối
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={
+                                    async() => onApprove(row.getValue("_id"), token, true)
+                                }
+                            >
+                                Duyệt
                             </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
@@ -159,37 +199,18 @@ export const getColumns = ({onDelete} : {onDelete: (id: string, token: string) =
         },
     },
     {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-            const { data: session, status } = useSession();
-            const token = session?.user.jwt;
-
-            return (
-                <AlertDialog>
-                    <AlertDialogTrigger>
-                        <Button variant="ghost"><Trash2 size={16} /></Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Bạn có chắc chắn muốn xóa sách này?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Hành động này không thể được hoàn tác và sẽ xóa vĩnh viễn dữ liệu của sách khỏi máy chủ của chúng tôi.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Huỷ</AlertDialogCancel>
-                            <AlertDialogAction
-                                onClick={
-                                    async() => onDelete(row.getValue("_id"), token)
-                                }
-                            >
-                                Tiếp tục
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-            )
-        },
+        accessorKey: "frontImageUrl",
+        header: ({ column }) => {},
+        cell: ({ row }) => <></>,
+    },
+    {
+        accessorKey: "backImageUrl",
+        header: ({ column }) => {},
+        cell: ({ row }) => <></>,
+    },
+    {
+        accessorKey: "_id",
+        header: ({ column }) => {},
+        cell: ({ row }) => <></>,
     },
 ];

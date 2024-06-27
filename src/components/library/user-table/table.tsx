@@ -2,8 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { getColumns } from "@/components/library/user-table/columns";
-import { type User } from "@/lib/interface";
-import { DeleteBook } from "@/lib/action";
+import { type User, UserJoin } from "@/lib/interface";
+import { ApproveUser } from "@/lib/action";
 
 import {
     ColumnFiltersState,
@@ -27,14 +27,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function UserTable({data} : {data: User[]}) {
+export default function UserTable({data} : {data: UserJoin[]}) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
 
-    const handleDelete = useCallback(DeleteBook, []);
-    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
+    const handleApprove = useCallback(ApproveUser, []);
+    const columns = useMemo(() => getColumns({onApprove: handleApprove}), [handleApprove]);
 
     const table = useReactTable({
         data,
@@ -118,10 +118,6 @@ export default function UserTable({data} : {data: User[]}) {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                {/* <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} trên {" "}
-          {table.getFilteredRowModel().rows.length} hàng được chọn.
-        </div> */}
                 <div className="space-x-2">
                     <Button
                         variant="outline"

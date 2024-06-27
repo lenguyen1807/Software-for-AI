@@ -62,7 +62,6 @@ export function FilterForm({ data }: { data: Filter }) {
         Object.keys(_data).map((idx) => {
             result[idx as keyof Filter] = MapOptionToValue(_data[idx as keyof Filter]);
         })
-        console.log(result);
         setProps(result);
     }
 

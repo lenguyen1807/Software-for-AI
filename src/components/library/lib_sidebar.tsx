@@ -3,7 +3,7 @@
 // import { useState } from 'react'
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command"
 import { Button } from '@/components/ui/button'
-import { UserRoundPlus, Home, UsersRound, BookLock, LibraryBig, CalendarCheck, UserRoundSearch, ReceiptText } from 'lucide-react'
+import { LibraryBig, UserRoundSearch, ReceiptText } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -14,7 +14,7 @@ const menuList = [
     {
         item: [
             {
-                link: "/library/book",
+                link: "/library",
                 icon: <LibraryBig size={20} strokeWidth={2.5} />,
                 text: "Kho sách"
             },
@@ -33,9 +33,6 @@ const menuList = [
 ]
 
 export default function SideBar() {
-    // const [selectedItem, setSelectedItem] = useState(false);
-    // const [value, setValue] = React.useState("")
-
     const pathname = usePathname();
 
     return (
@@ -63,13 +60,9 @@ export default function SideBar() {
                                         key={option.link}
                                     >
                                         <CommandItem
-                                            className={cn('flex gap-[20px] my-[15px] px-[15px] py-[10px] font-bold text-[17px] text-[#000938]/65 cursor-pointer hover:bg-gray-200 hover:text-[#000938]', {
-                                                "text-[#000938] bg-gray-200": option.link === pathname
+                                            className={cn('flex gap-[20px] my-[15px] px-[15px] py-[10px] font-bold text-[17px] text-[#000938]/65 cursor-pointer hover:text-[#000938]', {
+                                                "text-[#000938]": option.link === pathname
                                             })}
-                                        // onSelect={(currentValue) => {
-                                        //     setValue(currentValue === value ? "" : currentValue)
-                                        //     setSelectedItem(false)
-                                        // }}
                                         >
                                             <div>{option.icon}</div>
                                             <div>{option.text}</div>

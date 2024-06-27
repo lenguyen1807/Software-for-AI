@@ -153,7 +153,7 @@ export async function GetLibraryInfo(token: string) {
         }
     })
     const data = await res.json();
-    return data as Library;
+    return data as Library[0];
 }
 
 export async function GetBookRecommend(ID: string, num_books: number) {

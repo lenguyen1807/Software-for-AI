@@ -2,11 +2,9 @@
 
 import { useCallback, useMemo, useState  } from "react";
 import { getColumns } from "@/components/library/book-table/columns";
-import { type Book } from "@/lib/interface";
-import { DeleteBook } from "@/lib/action";
+import { Library, type Book } from "@/lib/interface";
+import { DeleteBookLibrary } from "@/lib/action";
 import AddBookForm from "@/components/library/add-book-form"
-import EditBookForm from "@/components/library/edit-book-form"
-import { auth } from "@/lib/auth"
 import {
     ColumnFiltersState,
     SortingState,
@@ -28,15 +26,14 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BookPlus } from "lucide-react";
 
-export default function BookLibTable({data} : {data: Book[]}) {
+export default function BookLibTable({data, lib, token} : {data: Book[], lib: Library, token: string}) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
 
-    const handleDelete = useCallback(DeleteBook, []);
+    const handleDelete = useCallback(DeleteBookLibrary, []);
     const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
 
     const table = useReactTable({
@@ -58,29 +55,19 @@ export default function BookLibTable({data} : {data: Book[]}) {
         },
     })
 
-//     const [showForm, setShowForm] = useState(false);
-
-//   const handleButtonClick = () => {
-//     setShowForm(!showForm);
-//   };
-
-
-
-
     return (
         <div className="px-[25px]">
             <div className="flex items-center justify-between py-4">
-                    <Input
-                        placeholder="Nhập tiêu đề để tìm sách"
-                        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-                        onChange={(event) =>
-                            table.getColumn("title")?.setFilterValue(event.target.value)
-                        }
-                        className="max-w-sm"
-                    />
-                
+                <Input
+                    placeholder="Nhập tiêu đề để tìm sách"
+                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                        table.getColumn("title")?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                />
                 <div className="flex items-center">
-                <AddBookForm />
+                    <AddBookForm libID={lib._id} libName={lib.name} token={token} />
                 </div>
             </div>
             <div className="rounded-md border">
@@ -134,10 +121,6 @@ export default function BookLibTable({data} : {data: Book[]}) {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                {/* <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} trên {" "}
-          {table.getFilteredRowModel().rows.length} hàng được chọn.
-        </div> */}
                 <div className="space-x-2">
                     <Button
                         variant="outline"

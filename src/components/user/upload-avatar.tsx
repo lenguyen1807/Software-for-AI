@@ -24,7 +24,6 @@ export function UploadAvatar({ value, token }: AvatarUploadProps) {
 	const [loading, setLoading] = React.useState(false);
 	const { toast } = useToast();
 	const pathname = usePathname();
-	const router = useRouter();
 
 	async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		if (e.target.files && e.target.files.length > 0) {

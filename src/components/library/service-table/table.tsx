@@ -1,10 +1,9 @@
 "use client"
 
 import { useCallback, useMemo, useState } from "react";
-import { getColumns } from "@/components/library/service-table/borrow/columns";
-import { type BorrowHistory } from "@/lib/interface";
+import { getColumns } from "@/components/library/service-table/columns";
+import { User, UserBorrow, type BorrowHistory } from "@/lib/interface";
 import { DeleteBook } from "@/lib/action";
-
 import {
     ColumnFiltersState,
     SortingState,
@@ -27,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function ServiceTableBorrow({data} : {data: BorrowHistory[]}) {
+export default function ServiceTable({data} : {data: UserBorrow[]}) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -118,10 +117,6 @@ export default function ServiceTableBorrow({data} : {data: BorrowHistory[]}) {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                {/* <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} trên {" "}
-          {table.getFilteredRowModel().rows.length} hàng được chọn.
-        </div> */}
                 <div className="space-x-2">
                     <Button
                         variant="outline"

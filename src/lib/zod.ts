@@ -108,3 +108,16 @@ export const UserPasswordSchema = z.object({
     })
   }
 });
+
+export const AddBookSchema = z.object({
+  title: z.string(),
+  author: z.string(),
+  genres: z.string(),
+  description: z.string(),
+  publisher: z.string(),
+  publishDate: z.string(),
+  numPages: z.number(), 
+  totalNum: z.number(), 
+  language: z.string(),
+  coverImage: z.array(z.instanceof(File))
+});
