@@ -170,7 +170,7 @@ export default async function Page({ params }: Props) {
                 libFee={lib.lateFeePerDay}
                 libDate={lib.maxBorrowDays}
                 userID={user?.id}
-                token={user.jwt}
+                token={data.jwt}
               />
             </div>
           </div>

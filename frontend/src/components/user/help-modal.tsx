@@ -49,7 +49,7 @@ const defaultMessage: Message = {
     first: true
 }
 
-export default function HelpModal({user} : {user: User}) {
+export default function HelpModal({user, token} : {user: User, token: string}) {
     const form = useForm<z.infer<typeof ChatSchema>>({
         resolver: zodResolver(ChatSchema)
     });
@@ -67,7 +67,7 @@ export default function HelpModal({user} : {user: User}) {
         }]
         setMessage(userMessage);
 
-        const reply = await GetChat(_data.query);
+        const reply = await GetChat(_data.query, token);
 
         setMessage([...userMessage, {
             value: reply, 

@@ -113,9 +113,12 @@ export async function GetBookReviews(bookID: string) {
     })
 }
 
-export async function GetChat(query: string) {
+export async function GetChat(query: string, token: string) {
     const res = await axios.get(ResolveURL("chat/"), {
-        params: {query: query}
+        params: {query: query},
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
     });
     return res.data as string;
 }
