@@ -1,11 +1,9 @@
 import { auth } from "@/lib/auth";
 import { ResolveURL } from "@/lib/utils";
-import { BorrowHistory } from "@/lib/interface";
 import { SessionProvider } from "next-auth/react";
 import ServiceTable from "@/components/library/service-table/table";
 import { GetBookByID } from "@/lib/api";
 import { type UserBorrow } from "@/lib/interface";
-import { User } from "@/lib/interface";
 
 export default async function Page() {
     const data = (await auth())?.user;
@@ -29,7 +27,7 @@ export default async function Page() {
                 returnDate: String(item.returnDate),
                 username: String(item.name),
                 _id: String(item._id),
-                status: Boolean(item.status)
+                status: String(item.status)
             }
         })
     )
