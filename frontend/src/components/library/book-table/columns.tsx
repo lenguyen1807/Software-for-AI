@@ -135,7 +135,25 @@ export const getColumns = ({ onDelete } : { onDelete: (id: string, token: string
         cell: ({ row }) => {
             const { data: session, status } = useSession();
             const token = session?.user.jwt;
-            const [book, setBook] = useState<Book>();
+            const [book, setBook] = useState<Book>({
+                _id: "",
+                title: "",
+                slug: "",
+                author: [""],
+                genres: [""],
+                language: "",
+                numPages: 0,
+                imageUrl: "",
+                publishDate: "",
+                publisher: "",
+                libraryID: "",
+                totalNum: 0,
+                currentNum: 0,
+                totalBorrow: 0,
+                libraryName: "",
+                avgRating: 0,
+                numOfRating: 0
+            });
 
             useEffect(() => {
                 GetBookByID(row.getValue("_id")).then((response) => {
