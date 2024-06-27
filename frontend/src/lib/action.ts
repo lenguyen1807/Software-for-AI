@@ -88,3 +88,12 @@ export async function ApproveUser(ID: string, token: string, accept: boolean) {
         throw error;
     }
 }
+
+export async function SetBookReturn(ID: string, token: string) {
+    await axios.put(ResolveURL(`libraries/borrows/${ID}`), null, {
+        params: {
+            status: "returned"
+        }
+    })
+    revalidatePath("/library/service");
+}

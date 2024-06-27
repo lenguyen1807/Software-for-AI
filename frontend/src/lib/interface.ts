@@ -73,7 +73,7 @@ export interface BorrowHistory {
     userID: string;
     borrowDate: string;
     returnDate: string;
-    status: boolean;
+    status: string;
 }
 
 export interface Filter {
@@ -110,5 +110,5 @@ export interface UserJoin extends User {
 
 export interface UserBorrow extends BorrowHistory {
     bookTitle: string,
-    username: string
+    username: string,
 }

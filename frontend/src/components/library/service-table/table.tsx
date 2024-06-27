@@ -2,8 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { getColumns } from "@/components/library/service-table/columns";
-import { User, UserBorrow, type BorrowHistory } from "@/lib/interface";
-import { DeleteBook } from "@/lib/action";
+import { UserBorrow } from "@/lib/interface";
+import { DeleteBook, SetBookReturn } from "@/lib/action";
 import {
     ColumnFiltersState,
     SortingState,
@@ -32,7 +32,7 @@ export default function ServiceTable({data} : {data: UserBorrow[]}) {
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = useState({});
 
-    const handleDelete = useCallback(DeleteBook, []);
+    const handleDelete = useCallback(SetBookReturn, []);
     const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
 
     const table = useReactTable({
