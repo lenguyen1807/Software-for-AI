@@ -34,7 +34,7 @@ export default function LibPage({ id, limit }: { id: string, limit: number }) {
 
     return (
         <>
-            <div className={cn(nunito.className, "flex flex-wrap gap-x-10 justify-around")}>
+            <div className={cn(nunito.className, "flex flex-wrap gap-x-10 justify-start")}>
                 {books.map((book) => (
                     <BookCard
                         book={book}
