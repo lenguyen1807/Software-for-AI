@@ -87,8 +87,8 @@ export function FilterForm({ data }: { data: Filter }) {
                                         badgeVariant="green-subtle"
                                         hidePlaceholderWhenSelected
                                         emptyIndicator={
-                                            <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                                Không tìm thấy sách phù hợp.
+                                            <p className="text-center px-2 text-sm text-gray-600 dark:text-gray-400">
+                                                Không tìm thể loại phù hợp.
                                             </p>
                                         }
                                         className='bg-white'
@@ -110,6 +110,11 @@ export function FilterForm({ data }: { data: Filter }) {
                                         placeholder="Tất cả"
                                         badgeVariant="pink-subtle"
                                         hidePlaceholderWhenSelected
+                                        emptyIndicator={
+                                            <p className="text-center px-2 text-sm text-gray-600 dark:text-gray-400">
+                                                Không tìm thấy tác giả phù hợp.
+                                            </p>
+                                        }
                                         className='bg-white'
                                     />
                                 </FormControl>
@@ -129,6 +134,11 @@ export function FilterForm({ data }: { data: Filter }) {
                                         placeholder="Tất cả"
                                         badgeVariant="teal-subtle"
                                         hidePlaceholderWhenSelected
+                                        emptyIndicator={
+                                            <p className="text-center px-2 text-sm text-gray-600 dark:text-gray-400">
+                                                Không tìm thấy NXB phù hợp.
+                                            </p>
+                                        }
                                         className='bg-white'
                                     />
                                 </FormControl>
@@ -148,6 +158,11 @@ export function FilterForm({ data }: { data: Filter }) {
                                         placeholder="Tất cả"
                                         badgeVariant="amber-subtle"
                                         hidePlaceholderWhenSelected
+                                        emptyIndicator={
+                                            <p className="text-center px-2 text-sm text-gray-600 dark:text-gray-400">
+                                                Không tìm thấy tuyển tập sách phù hợp.
+                                            </p>
+                                        }
                                         className='bg-white'
                                     />
                                 </FormControl>
@@ -167,6 +182,11 @@ export function FilterForm({ data }: { data: Filter }) {
                                         placeholder="Tất cả"
                                         badgeVariant="blue-subtle"
                                         hidePlaceholderWhenSelected
+                                        emptyIndicator={
+                                            <p className="text-center px-2 text-sm text-gray-600 dark:text-gray-400">
+                                                Không tìm thấy ngôn ngữ phù hợp.
+                                            </p>
+                                        }
                                         className='bg-white'
                                     />
                                 </FormControl>
