@@ -6,11 +6,11 @@ import { z } from "zod"
 
 import { Textarea } from "../ui/textarea"
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
 } from "@/components/ui/form";
 import { Button } from "../ui/button";
 import { Ratings } from "../ui/ratings"
@@ -25,7 +25,7 @@ const ReviewSchema = z.object({
     review: z.string(),
 })
 
-export default function ReviewForm({bookID, userID} : {bookID: string, userID: string | undefined}) {
+export default function ReviewForm({ bookID, userID }: { bookID: string, userID: string | undefined }) {
     const [rating, setRating] = useState(5);
     const form = useForm<z.infer<typeof ReviewSchema>>({
         resolver: zodResolver(ReviewSchema)
@@ -48,7 +48,7 @@ export default function ReviewForm({bookID, userID} : {bookID: string, userID: s
                 });
             }
         }).catch((error) => {
-            switch(error.response.status) {
+            switch (error.response.status) {
                 default:
                     toast({
                         title: "Có lỗi gì đó xảy ra rồi",
@@ -61,39 +61,45 @@ export default function ReviewForm({bookID, userID} : {bookID: string, userID: s
 
     return (
         <Form {...form}>
-            <form 
+            <form
                 className="space-y-6"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
-                <span className="text-sm">Rating của bạn đọc</span>
-                <Ratings
-                    onRatingChange={setRating}
-                    rating={5}
-                    totalStars={5}
-                    variant="yellow"
-                    size={25}
-                />
+                <span className="text-[15px] font-semibold">Đánh giá của bạn</span>
+                <div className="flex flex-col items-center">
+                    <Ratings
+                        onRatingChange={setRating}
+                        rating={5}
+                        totalStars={5}
+                        variant="yellow"
+                        size={25}
+                    />
+                </div>
+
                 <FormField
-                control={form.control}
-                name="review"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>
-                            Đánh giá của bạn đọc
-                        </FormLabel>
-                        <FormControl>
-                            <Textarea 
-                                placeholder="Nhập đánh giá của bạn đọc vào đây" 
-                                {...field} 
-                                required
-                            />
-                        </FormControl>
-                    </FormItem>
-                )}
+                    control={form.control}
+                    name="review"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-[15px] font-semibold">
+                                Nhận xét của bạn
+                            </FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="Hãy cho BoBo biết trải nghiệm của bạn thế nào nhé!"
+                                    {...field}
+                                    required
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
                 />
-                <Button type="submit">
-                    Đánh giá
-                </Button>
+                <div className="text-right">
+                    <Button type="submit">
+                        Đánh giá
+                    </Button>
+                </div>
+
             </form>
         </Form>
     )

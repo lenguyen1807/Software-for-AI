@@ -24,7 +24,7 @@ const menuList = [
                 text: "Cấp tài khoản"
             },
             {
-                link: "/admin/accounts",
+                link: "/admin",
                 icon: <UsersRound size={20} strokeWidth={2.5} />,
                 text: "Quản lý tài khoản"
             },

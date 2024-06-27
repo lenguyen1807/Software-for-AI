@@ -55,13 +55,13 @@ interface ISignUpContext {
 const SignUpContext = createContext<ISignUpContext>({ status: false, setStatus: () => { } });
 
 export default function RegisterForm({ token }: { token: string }) {
-    const [status, setStatus] = useState(false);
+    const [status, setStatus] = useState(true);
 
     return (
         <>
-            <SignUpContext.Provider value={{ status, setStatus }}>
+            {/* <SignUpContext.Provider value={{ status, setStatus }}>
                 <DialogAsk />
-            </SignUpContext.Provider>
+            </SignUpContext.Provider> */}
             <div className="flex w-3/4 flex-col gap-4">
                 <Stepper variant="circle-alt" initialStep={0} steps={steps}>
                     {steps.map((stepProps, index) => {
