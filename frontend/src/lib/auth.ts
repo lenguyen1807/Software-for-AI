@@ -1,24 +1,7 @@
-import NextAuth, { type DefaultSession } from "next-auth"
+import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { GetLoginData } from "@/lib/api";
 import { LoginSchema } from "@/lib/zod";
-import { ResolveURL } from "./utils";
-import { Library, User } from "@/lib/interface";
-
-// declare module "next-auth" {
-//   interface Session { user: {
-//         token: string,
-//         role: string
-//     } & DefaultSession["user"] & (User | Library | undefined)
-//   }
-
-//   interface JWT {
-//     user: {
-//         token: string,
-//         role: string
-//     } & DefaultSession["user"] & (User | Library | undefined)
-//   }
-// }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [

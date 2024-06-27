@@ -1,5 +1,5 @@
 "use client"
-import { User, UserJoin } from "@/lib/interface";
+import { UserJoin } from "@/lib/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ShieldCheck, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -37,24 +37,6 @@ export const getColumns = ({onApprove} : {onApprove: (id: string, token: string,
             )
         },
         cell: ({ row }) => <div className="text-center">{row.getValue("name")}</div>,
-    },
-    {
-        accessorKey: "username",
-        header: ({ column }) => {
-            return (
-                <div className="flex justify-center items-center">
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Tài khoản
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-
-            )
-        },
-        cell: ({ row }) => <div className="text-center">{row.getValue("username")}</div>,
     },
     {
         accessorKey: "email",
@@ -120,6 +102,8 @@ export const getColumns = ({onApprove} : {onApprove: (id: string, token: string,
         cell: ({ row }) => {
             const { data: session, status } = useSession();
             const token = session?.user.jwt;
+            const front = row.getValue("frontImageUrl")
+            const back = row.getValue("backImageUrl")
 
             return (
                 <AlertDialog>
@@ -136,12 +120,12 @@ export const getColumns = ({onApprove} : {onApprove: (id: string, token: string,
                         <div className="grid grid-cols-2 gap-x-14">
                             <div className="space-y-6">
                                 <span className="text-sm text-muted-foreground">Ảnh mặt trước</span>
-                                <Dialog>
+                                {front != undefined && <Dialog>
                                     <DialogTrigger>
                                         <Image src={row.getValue("frontImageUrl")}
                                             width={200} 
                                             height={200} 
-                                            alt={row.getValue("username")}
+                                            alt={row.getValue("email")}
                                             style={{
                                                 width: '100%',
                                                 height: 'auto',
@@ -150,19 +134,19 @@ export const getColumns = ({onApprove} : {onApprove: (id: string, token: string,
                                     </DialogTrigger>
                                     <DialogContent className="min-w-[600px]">
                                         <div className="relative h-[calc(100vh-220px)] w-full overflow-clip rounded-md bg-transparent">
-                                            <Image src={row.getValue("frontImageUrl")} fill alt={row.getValue("username")} className="h-full w-full object-contain" />
+                                            <Image src={row.getValue("frontImageUrl")} fill alt={row.getValue("email")} className="h-full w-full object-contain" />
                                         </div>
                                     </DialogContent>
-                                </Dialog>
+                                </Dialog>}
                             </div>
                             <div className="space-y-6">
                                 <span className="text-sm text-muted-foreground">Ảnh mặt sau</span>
-                                <Dialog>
+                                {back != undefined && <Dialog>
                                     <DialogTrigger>
                                         <Image src={row.getValue("backImageUrl")}
                                             width={200} 
                                             height={200} 
-                                            alt={row.getValue("username")}
+                                            alt={row.getValue("email")}
                                             style={{
                                                 width: '100%',
                                                 height: 'auto',
@@ -171,20 +155,23 @@ export const getColumns = ({onApprove} : {onApprove: (id: string, token: string,
                                     </DialogTrigger>
                                     <DialogContent className="min-w-[600px]">
                                         <div className="relative h-[calc(100vh-220px)] overflow-clip rounded-md bg-transparent">
-                                            <Image src={row.getValue("backImageUrl")} fill alt={row.getValue("username")} className="h-full w-full object-contain" />
+                                            <Image src={row.getValue("backImageUrl")} fill alt={row.getValue("email")} className="h-full w-full object-contain" />
                                         </div>
                                     </DialogContent>
-                                </Dialog>
+                                </Dialog>}
                             </div>
                         </div>
                         <AlertDialogFooter>
-                            <AlertDialogCancel
+                            <AlertDialogCancel>
+                                Huỷ 
+                            </AlertDialogCancel>
+                            <AlertDialogAction
                                 onClick={
                                     async() => onApprove(row.getValue("_id"), token, false)
                                 }
                             >
                                 Từ chối
-                            </AlertDialogCancel>
+                            </AlertDialogAction>
                             <AlertDialogAction
                                 onClick={
                                     async() => onApprove(row.getValue("_id"), token, true)

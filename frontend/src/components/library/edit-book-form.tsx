@@ -27,34 +27,40 @@ import { AddBookSchema } from "@/lib/zod";
 import { Book } from "@/lib/interface";
 import { Textarea } from "../ui/textarea";
 import { FileUploader } from "../ui/file-uploader";
+import { UploadImg } from "@/lib/api";
 
 const EditBookSchema = AddBookSchema.extend({
   currentNum: z.number()
 })
 
-export default function EditBookForm({token, book} : {token: string, book: Book | undefined}) {
+export default function EditBookForm({token, book} : {token: string, book: Book}) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const [books, setBooks] = useState<z.infer<typeof EditBookSchema>>({
+      title: book.title,
+      author: book.author.join(", "),
+      genres: book.genres.join(", "),
+      description: book?.description,
+      publisher: book.publisher,
+      publishDate: book.publishDate,
+      numPages: book.numPages,
+      totalNum: book.totalNum,
+      currentNum: book.currentNum,
+      language: book.language,
+      coverImage: [],
+  })
 
   const form = useForm<z.infer<typeof EditBookSchema>>({
     resolver: zodResolver(EditBookSchema),
-    defaultValues: {
-      title: book?.title,
-      author: book?.author.join(", "),
-      genres: book?.genres.join(", "),
-      description: book?.description,
-      publisher: book?.publisher,
-      publishDate: book?.publishDate,
-      numPages: book?.numPages,
-      totalNum: book?.totalNum,
-      currentNum: book?.currentNum,
-      language: book?.language,
-      coverImage: [],
-    }
+    defaultValues: books
   });
 
-  function onSubmit(_data: z.infer<typeof EditBookSchema>) {
+  async function onSubmit(_data: z.infer<typeof EditBookSchema>) {
     console.log(_data);
+    let imageUrl = null;
+    if (_data.coverImage.length > 0) {
+      imageUrl = (await UploadImg(_data.coverImage[0])).url;
+    }
   }
 
   return (
