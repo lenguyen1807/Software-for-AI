@@ -1,9 +1,9 @@
 "use client"
 
 import { useCallback, useMemo, useState } from "react";
-import { getColumns } from "@/components/admin/account-table/columns";
-import { User } from "@/lib/interface";
-import { DeleteUser } from "@/lib/action";
+import { getColumns } from "@/components/library/user-table/columns";
+import { type User, UserJoin } from "@/lib/interface";
+import { ApproveUser } from "@/lib/action";
 
 import {
     ColumnFiltersState,
@@ -27,14 +27,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function AccountAdminTable({data} : {data: User[]}) {
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
+export default function UserTable({data} : {data: UserJoin[]}) {
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
 
-    const handleDelete = useCallback(DeleteUser, []);
-    const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
+    const handleApprove = useCallback(ApproveUser, []);
+    const columns = useMemo(() => getColumns({onApprove: handleApprove}), [handleApprove]);
 
     const table = useReactTable({
         data,
@@ -53,21 +53,16 @@ export default function AccountAdminTable({data} : {data: User[]}) {
             columnVisibility,
             rowSelection,
         },
-        initialState: {
-            columnVisibility: {
-                "_id": false,
-            }
-        }
     })
 
     return (
         <div className="px-[25px]">
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Nhập để tìm tài khoản"
-                    value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+                    placeholder="Nhập tên người dùng để tìm"
+                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("username")?.setFilterValue(event.target.value)
+                        table.getColumn("name")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />

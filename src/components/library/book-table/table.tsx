@@ -1,10 +1,10 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react";
-import { getColumns } from "@/components/admin/account-table/columns";
-import { User } from "@/lib/interface";
-import { DeleteUser } from "@/lib/action";
-
+import { useCallback, useMemo, useState  } from "react";
+import { getColumns } from "@/components/library/book-table/columns";
+import { Library, type Book } from "@/lib/interface";
+import { DeleteBookLibrary } from "@/lib/action";
+import AddBookForm from "@/components/library/add-book-form"
 import {
     ColumnFiltersState,
     SortingState,
@@ -27,13 +27,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function AccountAdminTable({data} : {data: User[]}) {
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
+export default function BookLibTable({data, lib, token} : {data: Book[], lib: Library, token: string}) {
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
 
-    const handleDelete = useCallback(DeleteUser, []);
+    const handleDelete = useCallback(DeleteBookLibrary, []);
     const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
 
     const table = useReactTable({
@@ -53,24 +53,22 @@ export default function AccountAdminTable({data} : {data: User[]}) {
             columnVisibility,
             rowSelection,
         },
-        initialState: {
-            columnVisibility: {
-                "_id": false,
-            }
-        }
     })
 
     return (
         <div className="px-[25px]">
-            <div className="flex items-center py-4">
+            <div className="flex items-center justify-between py-4">
                 <Input
-                    placeholder="Nhập để tìm tài khoản"
-                    value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+                    placeholder="Nhập tiêu đề để tìm sách"
+                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("username")?.setFilterValue(event.target.value)
+                        table.getColumn("title")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
+                <div className="flex items-center">
+                    <AddBookForm libID={lib._id} libName={lib.name} token={token} />
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>

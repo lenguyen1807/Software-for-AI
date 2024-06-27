@@ -54,9 +54,37 @@ export async function DeleteBook(ID: string, token: string) {
     revalidatePath("/admin/books");
 }
 
+export async function DeleteBookLibrary(ID: string, token: string) {
+    await axios.delete(ResolveURL(`libraries/books/{bookID}`), {
+        params: {
+            id: ID
+        },
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    revalidatePath("/library");
+}
+
 export async function Revalidate(name: string, tag: boolean) {
     if (tag)
         revalidateTag(name);
     else
         revalidatePath(name);
+}
+
+export async function ApproveUser(ID: string, token: string, accept: boolean) {
+    try {
+        await axios.delete(ResolveURL(`libraries/members/requests/${ID}`), {
+            params: {
+                accept: accept,
+            }, 
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        revalidatePath("/library/user");
+    } catch (error) {
+        throw error;
+    }
 }

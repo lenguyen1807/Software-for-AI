@@ -1,10 +1,9 @@
 "use client"
 
 import { useCallback, useMemo, useState } from "react";
-import { getColumns } from "@/components/admin/account-table/columns";
-import { User } from "@/lib/interface";
-import { DeleteUser } from "@/lib/action";
-
+import { getColumns } from "@/components/library/service-table/columns";
+import { User, UserBorrow, type BorrowHistory } from "@/lib/interface";
+import { DeleteBook } from "@/lib/action";
 import {
     ColumnFiltersState,
     SortingState,
@@ -27,13 +26,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export default function AccountAdminTable({data} : {data: User[]}) {
-    const [sorting, setSorting] = useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
+export default function ServiceTable({data} : {data: UserBorrow[]}) {
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
 
-    const handleDelete = useCallback(DeleteUser, []);
+    const handleDelete = useCallback(DeleteBook, []);
     const columns = useMemo(() => getColumns({onDelete: handleDelete}), [handleDelete]);
 
     const table = useReactTable({
@@ -53,21 +52,16 @@ export default function AccountAdminTable({data} : {data: User[]}) {
             columnVisibility,
             rowSelection,
         },
-        initialState: {
-            columnVisibility: {
-                "_id": false,
-            }
-        }
     })
 
     return (
         <div className="px-[25px]">
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Nhập để tìm tài khoản"
-                    value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+                    placeholder="Nhập mã người mượn để tìm"
+                    value={(table.getColumn("userID")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("username")?.setFilterValue(event.target.value)
+                        table.getColumn("userID")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
