@@ -30,8 +30,6 @@ export default function LibPage({ id, limit }: { id: string, limit: number }) {
         })
     }, [page, id, limit]);
 
-    console.log(books)
-
     return (
         <>
             <div className={cn(nunito.className, "flex flex-wrap gap-x-10 justify-start")}>

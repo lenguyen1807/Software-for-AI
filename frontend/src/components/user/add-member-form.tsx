@@ -73,9 +73,6 @@ export default function AddMemberForm({
             const frontURL = (await UploadImg(_data.images[0])).url;
             const backURL = (await UploadImg(_data.images[1])).url;
             
-            console.log(frontURL)
-            console.log(backURL)
-
             // post join-request data
             await axios.post(ResolveURL("user/libraries/request"), {
                 userID: userID,

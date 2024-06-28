@@ -52,15 +52,15 @@ export default function EditBookForm({token, book} : {token: string, book: Book}
 
   const form = useForm<z.infer<typeof EditBookSchema>>({
     resolver: zodResolver(EditBookSchema),
-    defaultValues: books
+    // defaultValues: books
   });
 
   async function onSubmit(_data: z.infer<typeof EditBookSchema>) {
-    console.log(_data);
     let imageUrl = null;
     if (_data.coverImage.length > 0) {
       imageUrl = (await UploadImg(_data.coverImage[0])).url;
     }
+    form.reset();
   }
 
   return (

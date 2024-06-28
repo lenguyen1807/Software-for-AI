@@ -70,7 +70,6 @@ export default function BorrowForm({
         resolver: zodResolver(BorrowSchema)
     });
     const { toast } = useToast();
-    console.log(token);
     function onSubmit(_data: z.infer<typeof BorrowSchema>)
     {
         

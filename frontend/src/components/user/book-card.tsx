@@ -13,7 +13,6 @@ export default function BookCard({
     classNameImage,
     className
 }: Props) {
-    console.log(book);
     return (
         <figure
             key={book._id}

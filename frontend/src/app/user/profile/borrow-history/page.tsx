@@ -6,10 +6,10 @@ import { BorrowHistory } from "@/lib/interface";
 
 function GetStatus(item: BorrowHistory) {
     const returnDate = new Date(item.returnDate);
-    if (returnDate < new Date()) {
+    if (returnDate < new Date() && item.status != "returned") {
         return "dated";
     }
-    return item.status === "not returned" ? "not returned" : "returned";
+    return item.status;
 }
 
 export default async function History() {

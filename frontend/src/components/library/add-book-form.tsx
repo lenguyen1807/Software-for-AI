@@ -24,16 +24,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
-import { vi } from "date-fns/locale";
 import { ResolveURL, ToDateFormat, cn, slugify } from "@/lib/utils";
 import { AddBookSchema } from "@/lib/zod";
 import { Textarea } from "../ui/textarea";
@@ -55,7 +49,7 @@ export default function AddBookForm({libID, libName, token} : {libID: string, li
     const submitData = {
       slug: slugify(_data.title),
       title: _data.title,
-      publishDate: ToDateFormat(_data.publishDate),
+      publishDate: _data.publishDate,
       author: _data.author.split(", "),
       genres: _data.genres.split(", "),
       description: _data.description,

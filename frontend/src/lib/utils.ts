@@ -6,9 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function ResolveURL(path: string) {
-  return  process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/${path}`
-  : `http://127.0.0.1:8000/api/${path}`;
+  // return  process.env.NEXT_PUBLIC_VERCEL_URL
+  // ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/${path}`
+  // : `http://127.0.0.1:8000/api/${path}`;
+  return `http://127.0.0.1:8000/api/${path}`;
 }
 
 export function ToDateID(id: string) {
